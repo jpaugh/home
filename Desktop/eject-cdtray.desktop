@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Eject
+Description=Open or close the CD Tray
+Exec=eject -T
+Icon=/usr/share/icons/gnome/scalable/devices/drive-optical-symbolic.svg
+Terminal=false
+Type=Application

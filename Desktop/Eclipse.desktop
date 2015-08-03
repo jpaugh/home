@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Eclipse
+Description=A Java IDE
+Exec=/home/jpaugh/opt/eclipse/eclipse
+Icon=/home/jpaugh/opt/eclipse/icon.xpm
+Terminal=true
+Type=Application
+Comment[en_US]=
+GenericName[en_US]=A Java IDE
