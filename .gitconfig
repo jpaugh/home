@@ -1,3 +1,125 @@
 [user]
-	email = jpaugh@gmx.us
-	name = Jonathan Paugh
+    name = Jonathan Paugh
+    email = jpaugh@gmx.us
+    signingkey = 6E82B47F
+
+[core]
+    excludesfile = ~/.gitglobalignore
+    pager = "less -RFX"
+
+[color]
+    ui = true
+
+[color "diff"]
+    whitespace = red reverse
+
+[alias]
+    a = add
+    ap = add --patch
+    br = branch
+    cat = cat-file -p
+    ci = commit --verbose
+    cia = commit --verbose --all
+    amend = commit --amend --verbose
+    co = checkout
+    pick = cherry-pick
+    pickn = cherry-pick --no-commit
+    d  = diff
+    dc = diff --cached
+    dis= diff --ignore-space-change
+    dw = diff --word-diff=color
+    dcw = diff --cached --word-diff=color
+    ds = diff --stat
+    gconfig = config --global
+
+    ff = merge --ff-only
+    mm = merge --no-ff
+
+    l    = log --graph --pretty=oneline
+    # commits since the beginning of today
+    lt   = log --graph --pretty=oneline --since 00:00
+    la   = log --graph --pretty=oneline --all
+    lta  = log --graph --pretty=oneline --all --since 00:00
+    ls   = log --graph --pretty=oneline --stat
+    lst  = log --graph --pretty=oneline --stat --since 00:00
+    las  = log --graph --pretty=oneline --all --stat
+    lp   = log --graph --patch-with-stat
+    lap  = log --graph --all --patch-with-stat
+    ll   = log --graph --pretty=short --shortstat --notes
+    lls  = log --graph --pretty=short --stat --notes
+    llp  = log --graph --pretty=short --patch --notes
+    lll  = log --graph --pretty=full --shortstat --notes
+    llls = log --graph --pretty=full --stat --notes
+    lllp = log --graph --pretty=full --patch --notes
+    l1   = log --graph --pretty=full -1 --shortstat --notes
+    l5   = log --graph --pretty=oneline -5
+
+    st   = status -s
+    s = stash
+    ss = stash save
+    ssp = stash show --patch
+    sl = stash list
+    sa = stash apply
+    sp = stash pop
+    unstash = stash pop
+
+[gui]
+    historybrowser = gitk
+    editor = /usr/bin/gvim
+
+[format]
+    #pretty = oneline
+
+[log]
+    abbrevCommit = true
+    decorate = true
+
+[merge]
+    defaultToUpstream = true
+    log = 10
+
+[rerere]
+    enabled = true
+[pack]
+    threads = 0
+
+[push]
+    default = upstream
+
+[url "git://github.com/"]
+    insteadOf = gh:
+
+[url "git@github.com:jpaugh/"]
+    insteadOf = jpgh:
+    insteadOF = jp:
+
+[url "git://bitbucket.org/"]
+    insteadOf = bb:
+
+[url "git@bitbucket.org:jpaugh/"]
+    insteadOf = jpbb:
+
+[url "git.debian.org/collab-maint"]
+    insteadOf = deb:
+
+[url "git://git.savannah.gnu.org/"]
+    insteadOf = gnu:
+    insteadOf = savannah:
+
+[url "git://git.savannah.nongnu.org/"]
+    insteadOf = nongnu:
+    insteadOf = nognu:
+    insteadOf = ngnu:
+
+[url "git://git.gnome.org/"]
+    insteadOf = gnome:
+
+[url "git://repo.or.cz/"]
+    insteadOf = or:
+    insteadOf = repo:
+    insteadOf = or.cz:
+
+[github]
+    user = jpaugh64
+[rebase]
+    autosquash = True

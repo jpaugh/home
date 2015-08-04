@@ -1,0 +1,10 @@
+# These are ignore GLOBALLY, that is, by any project I use.
+*.sw?
+tags
+TAGS
+*~
+Session.vim
+*.py[co]
+cabal.sandbox.config
+.cabal-sandbox
+.no-compile

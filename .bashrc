@@ -1,12 +1,130 @@
-# ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
+#!/bin/bash
 
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
       *) return;;
 esac
+
+SAVE_PWD="$PWD"
+
+AM_ROOT=false
+[[ $UID -eq 0 ]] && AM_ROOT=true
+
+# ANSI Colors (convenience variables)
+declare -A COLOR
+COLOR[normal]='\e[0m'
+COLOR[green]='\e[1;32m'
+COLOR[blue]='\e[1;34m'
+COLOR[red]='\e[1;31m'
+
+if _BASHRC_WAS_RUN 2>/dev/null; then
+    :;
+else    # Stuff that only needs to run the first time we source .bashrc.
+        # Useful to allow resourcing new changes
+    OLD_PATH="$PATH"
+    PATH="$HOME/bin"
+    PATH+=":$HOME/node_modules/.bin"
+    #PATH+="$HOME/.cabal/bin"
+    #PATH+="$HOME/.gem/ruby/2.1.0/bin"
+    #PATH+=":$HOME/build/gradle/gradle-2.3/bin"
+    #PATH+=":$HOME/build/adt/adt-bundle-linux-x86-20140702/sdk/platform-tools"
+    #PATH+=":$HOME/build/adt/adt-bundle-linux-x86-20140702/sdk/tools"
+    #PATH+=":$HOME/build/adt/adt-bundle-linux-x86-20140702/sdk/build-tools/android-4.4W"
+    #PATH+=":/usr/local/texlive/2013/bin/i386-linux"
+
+    # The following line in case the OS default is not sane; Commented
+    # out because I trust Ubuntu more than Gentoo in this regard
+    #PATH+=":/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/games/bin:/usr/local/games/bin"
+    PATH+=":$OLD_PATH"
+    export PATH
+
+    alias _BASHRC_WAS_RUN=true
+
+    # Set the DEFAULT_CMD to git, once
+    # The DEFAULT_CMD is the command to run if the command line could
+    # not be understood;
+    DEFAULT_CMD=git
+
+    # Update PATH for the Google Cloud SDK
+    #source '/home/jpaugh/google-cloud-sdk/path.bash.inc'
+    # Enable bash completion for gcloud
+    #source '/home/jpaugh/google-cloud-sdk/completion.bash.inc'
+
+#command_not_found_handle () {
+#    eval '"$DEFAULT_CMD" $DEFAULT_CMD_PREFIX_ARGS "$@" $DEFAULT_CMD_POSTFIX_ARGS'
+#}
+export DEFAULT_CMD
+fi
+
+EDITOR=vim
+CFLAGS="-O2 -fomit-frame-pointer -pipe"
+CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
+MAKEOPTS="-j3"
+
+# Only show the last 3 directories in the path
+PROMPT_DIRTRIM=3
+
+export EDITOR CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM
+
+# For aliases that may need sudo to gain root priviledges
+SUDO=sudo
+SUDO+=" "
+$AM_ROOT && unset SUDO;
+
+alias g=git
+alias pdf='gui evince'
+alias myps='ps u -u $USER'
+alias diff='colordiff -u'
+
+alias vi=vim
+
+#vim () {
+#    if [ -z "$DISPLAY" ]; then
+#        # Vim hangs if it can't find an X server.
+#        # -X tells it not to connect to the X server.
+#        command vim -X "$@"
+#    else
+#        command vim "$@"
+#    fi
+#}
+
+# Tack on the end of a command line (`&& beepx`) to get status info when
+# the command ends
+# TODO: Learn how to do this with `notify-send`
+beepx () {
+    if [ $? -gt 0 ]; then
+        beep
+    else
+        beep -f
+    fi
+}
+
+# Last mod time of a file or files
+get_file_timestamp () {
+    ls -1 --time-style=+%s -l  "$@" | cut -f6 -d" "
+}
+
+# Make sure our version of the .bashrc file is up-to-date, or reload it.
+chk_bashrc_timestamp () {
+    if [[ "$_BASHRC_TIMESTAMP" -lt "$(get_file_timestamp "$HOME/.bashrc")" ]]; then
+        echo >&2 "Reloading .bashrc..."
+        . ~/.bashrc
+    fi
+}
+_BASHRC_TIMESTAMP=$(date +%s)
+
+# Collection of commands to run between prompts. Should be lightweight
+prompt_cmd () {
+    err=$?
+    if [ $err -gt 0 ]; then
+        echo >&2 -e "Error code: ${COLOR[red]}$err${COLOR[normal]}"
+    fi
+    chk_bashrc_timestamp
+}
+PROMPT_COMMAND=prompt_cmd
+
+cd "$SAVE_PWD"
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
@@ -43,16 +161,16 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+        # We have color support; assume it's compliant with Ecma-48
+        # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+        # a case would tend to support setf rather than setaf.)
+        color_prompt=yes
     else
-	color_prompt=
+        color_prompt=
     fi
 fi
 
