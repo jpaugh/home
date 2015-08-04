@@ -13,6 +13,23 @@
 [color "diff"]
     whitespace = red reverse
 
+[merge]
+    defaulttoUpstream = true
+    log = 10
+
+[rerere]
+    enabled = true
+
+[rebase]
+    autosquash = True
+
+[gui]
+    historybrowser = gitk
+    editor = /usr/bin/gvim
+
+[pack]
+  threads = 0
+
 [alias]
     a = add
     ap = add --patch
@@ -35,24 +52,28 @@
     ff = merge --ff-only
     mm = merge --no-ff
 
-    l    = log --graph --pretty=oneline
+    l    = log --decorate --graph --oneline
     # commits since the beginning of today
-    lt   = log --graph --pretty=oneline --since 00:00
-    la   = log --graph --pretty=oneline --all
-    lta  = log --graph --pretty=oneline --all --since 00:00
-    ls   = log --graph --pretty=oneline --stat
-    lst  = log --graph --pretty=oneline --stat --since 00:00
-    las  = log --graph --pretty=oneline --all --stat
-    lp   = log --graph --patch-with-stat
-    lap  = log --graph --all --patch-with-stat
-    ll   = log --graph --pretty=short --shortstat --notes
-    lls  = log --graph --pretty=short --stat --notes
-    llp  = log --graph --pretty=short --patch --notes
-    lll  = log --graph --pretty=full --shortstat --notes
-    llls = log --graph --pretty=full --stat --notes
-    lllp = log --graph --pretty=full --patch --notes
-    l1   = log --graph --pretty=full -1 --shortstat --notes
-    l5   = log --graph --pretty=oneline -5
+    lt   = log --decorate --graph --oneline --since 00:00
+    la   = log --decorate --graph --oneline --all
+    lta  = log --decorate --graph --oneline --all --since 00:00
+    ls   = log --decorate --graph --oneline --stat
+    lst  = log --decorate --graph --oneline --stat --since 00:00
+    las  = log --decorate --graph --oneline --all --stat
+    lp   = log --decorate --graph --patch-with-stat
+    lap  = log --decorate --graph --all --patch-with-stat
+    ll   = log --decorate --graph --pretty=short --shortstat --notes
+    lls  = log --decorate --graph --pretty=short --stat --notes
+    llp  = log --decorate --graph --pretty=short --patch --notes
+    lll  = log --decorate --graph --pretty=full --shortstat --notes
+    llls = log --decorate --graph --pretty=full --stat --notes
+    lllp = log --decorate --graph --pretty=full --patch --notes
+    l1   = log --decorate --graph --pretty=full -1 --shortstat --notes
+    l5   = log --decorate --graph --oneline -5
+
+    # Ideal for fixups or squashes
+    lfix = log -1 '--pretty=format:fixup! %s'
+    lsquash = log -1 '--pretty=format:squash! %s'
 
     st   = status -s
     s = stash
@@ -62,6 +83,11 @@
     sa = stash apply
     sp = stash pop
     unstash = stash pop
+
+    dcommit = svn dcommit --interactive
+    vf  = svn fetch
+    vr  = svn rebase
+    vrl = svn rebase -l
 
 [gui]
     historybrowser = gitk

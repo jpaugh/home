@@ -26,9 +26,6 @@ set linebreak		" word-wrap long lines instead of char-wrapping
 set gdefault            " %s/// replaces all matches; /g turns it back off
 "set tildeop		" ~ command accepts a motion (like delete or change do)
 
-
-"set statusline=%{fugitive#statusline()} " Git revision num
-
 ""
 " Mappings
 

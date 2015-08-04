@@ -8,3 +8,4 @@ Session.vim
 cabal.sandbox.config
 .cabal-sandbox
 .no-compile
+.svn
