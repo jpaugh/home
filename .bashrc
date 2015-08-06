@@ -18,6 +18,28 @@ COLOR[green]='\e[1;32m'
 COLOR[blue]='\e[1;34m'
 COLOR[red]='\e[1;31m'
 
+renameFunction () {
+    local oldName="$1"; shift
+    local newName="$1"
+
+    local definition="$(declare -f "$oldName")"
+    if [[ $? -gt 0 ]]; then
+        echo >&2 "renameFunction: $oldName is not a function"
+        return
+    fi
+
+    if declare -f  "$newName" >/dev/null 2>/dev/null; then
+        echo >&2 "renameFunction: $newName is already defined"
+        return
+    fi
+
+    eval "$(echo "${definition/"$oldName"/"$newName"}")"
+    # Does not work for recursive functions (like "//" would), but also
+    # doesn't break if $oldName is a substring of something else
+
+    unset "$oldName"
+}
+
 if _BASHRC_WAS_RUN 2>/dev/null; then
     :;
 else    # Stuff that only needs to run the first time we source .bashrc.
@@ -40,21 +62,24 @@ else    # Stuff that only needs to run the first time we source .bashrc.
     export PATH
 
     alias _BASHRC_WAS_RUN=true
-
-    # Set the DEFAULT_CMD to git, once
-    # The DEFAULT_CMD is the command to run if the command line could
-    # not be understood;
-    DEFAULT_CMD=git
-
     # Update PATH for the Google Cloud SDK
     #source '/home/jpaugh/google-cloud-sdk/path.bash.inc'
     # Enable bash completion for gcloud
     #source '/home/jpaugh/google-cloud-sdk/completion.bash.inc'
 
-#command_not_found_handle () {
-#    eval '"$DEFAULT_CMD" $DEFAULT_CMD_PREFIX_ARGS "$@" $DEFAULT_CMD_POSTFIX_ARGS'
-#}
-export DEFAULT_CMD
+    # Set the DEFAULT_CMD to git, once
+    # The DEFAULT_CMD is the command to run if the command line could
+    # not be understood;
+    DEFAULT_CMD=git
+    renameFunction command_not_found_handle PREVIOUS_COMMAND_NOT_FOUND_HANDLE
+
+    command_not_found_handle () {
+        eval '"$DEFAULT_CMD" $DEFAULT_CMD_PREFIX_ARGS "$@" $DEFAULT_CMD_POSTFIX_ARGS'
+        if [ $? -gt 0 ]; then
+            PREVIOUS_COMMAND_NOT_FOUND_HANDLE "$@"
+        fi
+    }
+    export DEFAULT_CMD
 fi
 
 EDITOR=vim
