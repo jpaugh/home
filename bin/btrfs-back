@@ -1,0 +1,28 @@
+#!/bin/bash -e
+# btrfs-back    Incremental backup of btrfs systems 
+
+[[ $UID -eq 0 ]] || {
+    echo "Must be root to perform a backup" >&2
+    exit 1
+}
+
+: ${SUBVOLS:="@ @home"} ${SUBVOL_PREFIX:="/root/"} ${SNAPSHOT_PREFIX:="/root/snapshots/backup/"} ${REMOTE_PREFIX:=""}
+SNAPSHOT_DATE="$(date --utc "+%Y-%m-%d_%H.%M.%S_%s")"
+
+for vol in $SUBVOLS; do
+    snapshot_name="${vol}/snapshot_${SNAPSHOT_DATE}"
+    btrfs subvolume snapshot -r "${SUBVOL_PREFIX}${vol}" "${SNAPSHOT_PREFIX}${snapshot_name}"
+done
+
+echo "Syncing filesystem..."
+sync
+
+for vol in $SUBVOLS; do
+    snapshot_ln_name="snapshot_${SNAPSHOT_DATE}"
+    snapshot_name="${vol}/${snapshot_ln_name}"
+    latest="${SNAPSHOT_PREFIX}${vol}/latest"
+    # echo "Sending snapshot ${snapshot_name}..."
+    # btrfs send -p ${latest} "${SNAPSHOT_PREFIX}${snapshot_name}" | btrfs receive "${REMOTE_PREFIX}${snapshot_name}"
+    [[ -h "${latest}" ]] && rm "${latest}"
+    ln -s "${snapshot_ln_name}" "${latest}"
+done
