@@ -90,11 +90,12 @@ EDITOR=vim
 CFLAGS="-O2 -fomit-frame-pointer -pipe"
 CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
 MAKEOPTS="-j3"
+JAVA_HOME="/opt/java/jdk"
 
 # Only show the last 3 directories in the path
 PROMPT_DIRTRIM=3
 
-export EDITOR CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM
+export EDITOR CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM JAVA_HOME
 
 # For aliases that may need sudo to gain root priviledges
 SUDO=sudo
