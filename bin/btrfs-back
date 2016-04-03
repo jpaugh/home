@@ -21,8 +21,12 @@ for vol in $SUBVOLS; do
     snapshot_ln_name="snapshot_${SNAPSHOT_DATE}"
     snapshot_name="${vol}/${snapshot_ln_name}"
     latest="${SNAPSHOT_PREFIX}${vol}/latest"
+    previous="${SNAPSHOT_PREFIX}${vol}/previous"
     # echo "Sending snapshot ${snapshot_name}..."
     # btrfs send -p ${latest} "${SNAPSHOT_PREFIX}${snapshot_name}" | btrfs receive "${REMOTE_PREFIX}${snapshot_name}"
-    [[ -h "${latest}" ]] && rm "${latest}"
+    [[ -h "${latest}" ]] && {
+        [[ -h "${previous}" ]] && rm "${previous}"
+        mv "${latest}" "${previous}"
+    }
     ln -s "${snapshot_ln_name}" "${latest}"
 done
