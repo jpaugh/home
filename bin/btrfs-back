@@ -29,4 +29,11 @@ for vol in $SUBVOLS; do
         mv "${latest}" "${previous}"
     }
     ln -s "${snapshot_ln_name}" "${latest}"
+
+    # Add user-defined "labels", i.e. symlinks
+    if [ $# -gt 0 ]; then
+        for label in $@; do
+           ln -s "${snapshot_ln_name}" "${SNAPSHOT_PREFIX}${vol}/$label" || true
+        done
+    fi
 done
