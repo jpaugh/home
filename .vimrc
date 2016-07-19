@@ -313,7 +313,7 @@ if isdirectory('cabal-dev')
     let g:ghcmod_ghc_options += ['-package-db=cabal-dev/packages-7.6.2.conf']
 endif
 
-au FileType haskell au BufWritePost <buffer> GhcModCheckAndLintAsync
+"au FileType haskell au BufWritePost <buffer> GhcModCheckAndLintAsync
 au FileType haskell call HaskellMappings()
 
 let g:haskell_autotags = 1
