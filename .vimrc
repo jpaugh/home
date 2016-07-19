@@ -15,7 +15,7 @@ set textwidth=72
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
-set shiftwidth=4	" Indent amount = 2 spaces
+set shiftwidth=4	" Indent amount = 4 spaces
 set softtabstop=4	" <tab> is the same, but doesn't affect real tabs.
 set expandtab		" Arrg! Python finally bit me!
 set splitright splitbelow " Make new windows come up idiosyncronously.
@@ -282,6 +282,7 @@ au BufReadPre *.hamlet set filetype=hamlet
 ActivateAddons neocomplcache
 ActivateAddons fugitive vcscommand surround
 ActivateAddons Tagbar
+ActivateAddons snipmate
 
 ""
 " Haskell-specific settings
