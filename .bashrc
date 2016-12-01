@@ -63,6 +63,7 @@ else    # Stuff that only needs to run the first time we source .bashrc.
     # out because I trust Ubuntu more than Gentoo in this regard
     #PATH+=":/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/games/bin:/usr/local/games/bin"
     PATH+=":$OLD_PATH"
+    PATH+=":/opt/neovim/latest/bin"
     export PATH
 
     alias _BASHRC_WAS_RUN=true
@@ -240,6 +241,12 @@ alias l='ls -CF'
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Steam Games
+
+#Adventure capitalist
+alias adcap='steam steam://rungameid/346900'
+alias factorio='steam steam://rungameid/427520'
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
