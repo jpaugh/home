@@ -1,0 +1,3 @@
+#!/bin/sh
+output=${1:-$HOME/recording.wav}
+exec avconv -f pulse -i default -ac 1 -re -f wav $output
