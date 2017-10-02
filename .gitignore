@@ -9,7 +9,6 @@
 .android/
 .audacity*
 .bash_history
-.cabal/*
 .cache
 .compiz/
 .config
