@@ -242,34 +242,16 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
 endfun
 
 fun! SetupVAM()
-  " Set advanced options like this:
-  " let g:vim_addon_manager = {}
-  " let g:vim_addon_manager.key = value
-  "     Pipe all output into a buffer which gets written to disk
-  " let g:vim_addon_manager.log_to_buf =1
-
-  " Example: drop git sources unless git is in PATH. Same plugins can
-  " be installed from www.vim.org. Lookup MergeSources to get more control
-  " let g:vim_addon_manager.drop_git_sources = !executable('git')
-  " let g:vim_addon_manager.debug_activation = 1
-
   " VAM install location:
   let c = get(g:, 'vim_addon_manager', {})
   let g:vim_addon_manager = c
   let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
-
-
-  " Force your ~/.vim/after directory to be last in &rtp always:
-  " let g:vim_addon_manager.rtp_list_hook = 'vam#ForceUsersAfterDirectoriesToBeLast'
 
   " if !EnsureVamIsOnDisk(c.plugin_root_dir)
   "   echohl ErrorMsg | echomsg "No VAM found!" | echohl NONE
   "   return
   " endif
 
-  " most used options you may want to use:
-  " let c.log_to_buf = 1
-  " let c.auto_install = 0
   let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
   " If VAM is missing, download and install it
   if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
@@ -277,18 +259,11 @@ fun! SetupVAM()
         \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
   endif
 
-  " Tell VAM which plugins to fetch & load:
-  call vam#ActivateAddons([], {'auto_install' : 0})
-  " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
+  " Manually loaded plugins: these are for all files
+  call vam#ActivateAddons([
+          \ "surround", "neocomplcache", "vcscommand", "Tagbar", "snipmate"
+      \ ], {'auto_install' : 1})
 
-  " Addons are put into plugin_root_dir/plugin-name directory
-  " unless those directories exist. Then they are activated.
-  " Activating means adding addon dirs to rtp and do some additional
-  " magic
-
-  " How to find addon names?
-  " - look up source from pool
-  " - (<c-x><c-p> complete plugin names):
   " You can use name rewritings to point to sources:
   "    ..ActivateAddons(["github:foo", .. => github://foo/vim-addon-foo
   "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
@@ -296,30 +271,6 @@ fun! SetupVAM()
 endfun
 
 call SetupVAM()
-
-" ACTIVATING PLUGINS
-
-" OPTION 1, use VAMActivate
-" VAMActivate PLUGIN_NAME PLUGIN_NAME ..
-
-" OPTION 2: use call vam#ActivateAddons
- call vam#ActivateAddons(["surround"], {})
-" 'Windows_PowerShell_Syntax_Plugin'
-" use <c-x><c-p> to complete plugin names
-
-" OPTION 3: Create a file ~/.vim-srcipts putting a PLUGIN_NAME into each line
-" See lazy loading plugins section in README.md for details
-"call vam#Scripts('~/.vim-scripts', {'tag_regex': '.*'})
-
-
-
-" experimental [E1]: load plugins lazily depending on filetype, See
-" NOTES
-" experimental [E2]: run after gui has been started (gvim) [3]
-" option1:  au VimEnter * call SetupVAM()
-" option2:  au GUIEnter * call SetupVAM()
-" See BUGS sections below [*]
-" Vim 7.0 users see BUGS section [3]
 
 ""
 " Lazy filetype plugin loading
@@ -343,9 +294,6 @@ let g:lazyPlugins = {
 "     \ }], { 'tag_regex' : '.*'})
 
 fun! LoadLazyPlugins()
-    " TODO: Remove an entry when the rule fires, and store the list of
-    " plugins for reuse; this way, we only activate an addon once per
-    " run, not once per file.
     let l:plugins = filter(copy(g:lazyPlugins)
         \               , string(expand('<amatch>')) . ' =~ v:key')
 
@@ -358,12 +306,6 @@ au FileType * call LoadLazyPlugins ()
 
 au BufReadPre *.cmm setfiletype c
 au BufReadPre *.hamlet setfiletype hamlet
-
-" Manually loaded plugins: these are for all files
-ActivateAddons neocomplcache
-ActivateAddons fugitive vcscommand surround
-ActivateAddons Tagbar
-ActivateAddons snipmate
 
 ""
 " Haskell-specific settings
