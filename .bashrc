@@ -127,7 +127,9 @@ $AM_ROOT && unset SUDO;
 alias g=git
 alias pdf='gui evince'
 alias myps='ps u -u $USER'
-alias diff='colordiff -u'
+if [[ -x  $(which colordiff 2>/dev/null 1>&2) ]]; then
+    alias diff='colordiff -u'
+fi
 
 alias vi=vim
 
