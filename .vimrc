@@ -355,8 +355,8 @@ endfun
 
 au FileType * call LoadLazyPlugins ()
 
-au BufReadPre *.cmm set filetype=c
-au BufReadPre *.hamlet set filetype=hamlet
+au BufReadPre *.cmm setfiletype c
+au BufReadPre *.hamlet setfiletype hamlet
 
 " Manually loaded plugins: these are for all files
 ActivateAddons neocomplcache
@@ -439,6 +439,7 @@ let g:ghcmod_hlint_options = [ "--ignore=Use camelCase" ]
     inoremap <expr><C-g>     neocomplcache#undo_completion()
     inoremap <expr><C-l>     neocomplcache#complete_common_string()
 
+
 fun! HaskellMappings ()
     " Set up keymappings for Haskell code
     " Run via autocommand later
@@ -497,8 +498,8 @@ if has("autocmd")
     \   exe "normal! g`\"" |
     \ endif
 
-  autocmd BufReadPost *.nut :set filetype=cpp
-  autocmd BufEnter .less set filetype=less
+  autocmd BufReadPost *.nut setfiletype cpp
+  autocmd BufEnter .less setfiletype less
 
   augroup END
 
@@ -666,8 +667,9 @@ endfun
 
 au FileType * call LoadLazyPlugins ()
 
-au BufReadPre *.cmm set filetype=c
-au BufReadPre *.hamlet set filetype=hamlet
+au BufReadPre *.cmm setfiletype c
+au BufReadPre *.hamlet setfiletype hamlet
+au BufReadPre *.ubs setfiletype unibasic
 
 " Manually loaded plugins: these are for all files
 ActivateAddons neocomplcache
