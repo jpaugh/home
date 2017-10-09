@@ -123,8 +123,8 @@ map <silent> <S-F10> :!ctags -R
 
 " Delete extra spaces at the end of lines
 map <silent> <F11> :%s/\v\s+$//
-" Search for (git) merge conflicts
-map <silent> <S-F11> /^\v[<=>]{7}
+" Search for (git/svn) merge conflicts
+map <silent> <S-F11> /^\v[<=\|>]{7}
 
 " Open the .vimrc file for editing
 map <silent> <F12> :tabe ~/.vimrc
