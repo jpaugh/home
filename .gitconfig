@@ -5,6 +5,9 @@
     excludesfile = ~/.gitglobalignore
     pager = "less -RFX"
 
+[diff]
+    wordRegex = \\w+|[^\\w]
+
 [color]
     ui = true
 
