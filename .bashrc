@@ -44,6 +44,19 @@ isFunction () {
     declare -F "$1" >/dev/null
 }
 
+getOS () {
+    case uname in
+        [Ll][Ii][Nn][Uu][Xx])
+            echo Linux
+            ;;
+        [Mm][Ii][Nn][Gg][Ww]*)
+            echo MinGW
+            ;;
+    esac
+}
+
+JP_ENVIRONMENT="$(getOS)"
+
 if _BASHRC_WAS_RUN 2>/dev/null; then
     :;
 else    # Stuff that only needs to run the first time we source .bashrc.
