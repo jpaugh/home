@@ -177,6 +177,9 @@ if has("autocmd")
   autocmd FileType text setlocal textwidth=72
   " au FileType text setlocal formatoptions+=a " Auto-reshape paragraphs (more often)
 
+  " For HTML files, change textwidth and shiftwidth
+  autocmd FileType html setlocal textwidth=0 shiftwidth=2
+
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
   " (happens when dropping a file on gvim).
