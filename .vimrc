@@ -190,9 +190,13 @@ if has("autocmd")
     \   exe "normal! g`\"" |
     \ endif
 
-  autocmd BufReadPost *.nut :set filetype=cpp
+  autocmd BufReadPost *.nut setfiletype cpp
+  au BufReadPre *.coffee setfiletype coffee
+  au BufReadPost *.md setfiletype markdown
 
-  autocmd BufEnter .less set filetype=less
+  au BufReadPost * :GitGutterEnable
+
+  autocmd BufEnter .less setfiletype less
 
   augroup END
 
