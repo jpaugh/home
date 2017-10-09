@@ -647,6 +647,7 @@ let g:lazyPlugins = {
     \ , 'hamlet\|cassius\|lucius\|julius' : [ 'html-template-syntax' ]
     \ , 'lojban' :          [ 'lojban' ]
     \ , 'rfc' :             [ 'rfc-syntax' ]
+    \ , 'coffee':           [ 'vim-coffee-script' ]
     \ }
 "    \ , 'ps1' :             [ 'Windows_PowerShell_Syntax_Plugin' ] " TODO
 " call vam#Scripts([{
