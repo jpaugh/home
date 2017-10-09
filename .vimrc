@@ -38,11 +38,14 @@ set wildmode=longest:full,full
 "   full        If user pressses <Tab> again, match the first full
 "               string in the list, instead of longest common substring
 
-" Perfer UTF-8 encoding
-" As I understand it, this variable is only used if none of the
+" Prefer UTF-8 encoding
+set encoding=utf-8
+" As I understand it, encoding is variable is only used if none of the
 " encodings in 'fileencodings' works; Loading a file with utf-8 encoding
 " will not corrupt it, even it it is from a different encoding.
-set encoding=utf-8
+
+" Doesn't UTF-16 files, fails for ASCII.
+" set fileencodings=ucs-bom,utf-16le,utf-8
 
 set formatoptions=tcqjroqn
 "   t   autowrap text
