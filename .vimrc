@@ -116,6 +116,7 @@ map <silent> <F7> :set spell!
 map <silent> <F9> :cnext
 map <silent> <S-F9> :cprevious
 
+" Tagbar is a CTags plugin
 " Open/Close tagbar
 map <silent> <F10> :TagbarToggle
 " Refresh tags list
@@ -740,10 +741,10 @@ call extend(warns, split(join(extend([''], split(warnings)), ' -fwarn-')))
 call extend(warns, split(join(extend([''], split(nowarnings)), ' -fno-warn-')))
 
 let g:ghcmod_ghc_options = warns + exts +
-        \ [ '-user-package-db', '-fno-code', '-fdefer-type-errors' ]
+    \ [ '-user-package-db', '-fno-code', '-fdefer-type-errors' ]
 
 if isdirectory('cabal-dev')
-    let g:ghcmod_ghc_options += ['-package-db=cabal-dev/packages-7.6.2.conf']
+let g:ghcmod_ghc_options += ['-package-db=cabal-dev/packages-7.6.2.conf']
 endif
 
 "au FileType haskell au BufWritePost <buffer> GhcModCheckAndLintAsync
