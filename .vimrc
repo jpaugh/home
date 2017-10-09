@@ -2,9 +2,6 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
-" TODO: Test for OS
-let $PATH = $PATH. ';C:\\Users\\Jonathan.Paugh\\AppData\\Local\\Programs\\Git\\mingw64\\bin'
-
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
