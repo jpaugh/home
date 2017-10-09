@@ -302,7 +302,8 @@ call SetupVAM()
 " VAMActivate PLUGIN_NAME PLUGIN_NAME ..
 
 " OPTION 2: use call vam#ActivateAddons
- call vam#ActivateAddons(["surround", 'Windows_PowerShell_Syntax_Plugin'], {})
+ call vam#ActivateAddons(["surround"], {})
+" 'Windows_PowerShell_Syntax_Plugin'
 " use <c-x><c-p> to complete plugin names
 
 " OPTION 3: Create a file ~/.vim-srcipts putting a PLUGIN_NAME into each line
@@ -331,6 +332,8 @@ let g:lazyPlugins = {
     \ , 'hamlet\|cassius\|lucius\|julius' : [ 'html-template-syntax' ]
     \ , 'lojban' :          [ 'lojban' ]
     \ , 'rfc' :             [ 'rfc-syntax' ]
+    \ , 'ps1' :             [ 'vim-ps1' ]
+    \ , 'ubs' :             [ 'unibasic' ]
     \ }
 "    \ , 'ps1' :             [ 'Windows_PowerShell_Syntax_Plugin' ]
 " call vam#Scripts([{
