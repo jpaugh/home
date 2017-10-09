@@ -1,7 +1,5 @@
 [user]
     name = Jonathan Paugh
-    email = jpaugh@gmx.us
-    signingkey = 6E82B47F
 
 [core]
     excludesfile = ~/.gitglobalignore
