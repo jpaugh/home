@@ -40,6 +40,23 @@ renameFunction () {
     unset "$oldName"
 }
 
+isFunction () {
+    declare -F "$1" >/dev/null
+}
+
+getOS () {
+    case uname in
+        [Ll][Ii][Nn][Uu][Xx])
+            echo Linux
+            ;;
+        [Mm][Ii][Nn][Gg][Ww]*)
+            echo MinGW
+            ;;
+    esac
+}
+
+JP_ENVIRONMENT="$(getOS)"
+
 if _BASHRC_WAS_RUN 2>/dev/null; then
     :;
 else    # Stuff that only needs to run the first time we source .bashrc.
@@ -76,7 +93,11 @@ else    # Stuff that only needs to run the first time we source .bashrc.
     # The DEFAULT_CMD is the command to run if the command line could
     # not be understood;
     DEFAULT_CMD=git
-    renameFunction command_not_found_handle PREVIOUS_COMMAND_NOT_FOUND_HANDLE
+    if isFunction command_not_found_handle; then
+	renameFunction command_not_found_handle PREVIOUS_COMMAND_NOT_FOUND_HANDLE
+    else
+	PREVIOUS_COMMAND_NOT_FOUND_HANDLE() { :; }
+    fi
 
     command_not_found_handle () {
         eval '"$DEFAULT_CMD" $DEFAULT_CMD_PREFIX_ARGS "$@" $DEFAULT_CMD_POSTFIX_ARGS'
@@ -106,7 +127,9 @@ $AM_ROOT && unset SUDO;
 alias g=git
 alias pdf='gui evince'
 alias myps='ps u -u $USER'
-alias diff='colordiff -u'
+if [[ -x  $(which colordiff 2>/dev/null 1>&2) ]]; then
+    alias diff='colordiff -u'
+fi
 
 alias vi=vim
 
@@ -205,11 +228,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir

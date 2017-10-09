@@ -1,11 +1,12 @@
 [user]
     name = Jonathan Paugh
-    email = jpaugh@gmx.us
-    signingkey = 6E82B47F
 
 [core]
     excludesfile = ~/.gitglobalignore
     pager = "less -RFX"
+
+[diff]
+    wordRegex = \\w+|[^\\w]
 
 [color]
     ui = true
