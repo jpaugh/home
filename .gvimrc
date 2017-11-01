@@ -1,5 +1,5 @@
 colorscheme desert
-set toolbar=icons,text,horiz toolbariconsize=tiny
+" set toolbar=icons,text,horiz toolbariconsize=tiny
 set guiheadroom=20
 set browsedir=buffer
 set guioptions=acegimt
