@@ -48,6 +48,8 @@
     dis= diff --ignore-space-change
     dw = diff --word-diff=color
     dcw = diff --cached --word-diff=color
+    dwi = diff --word-diff=color --ignore-space-change
+    dcwi = diff --cached --word-diff=color --ignore-space-change
     ds = diff --stat
     guidiff = difftool -d
     gdiff = difftool -d
