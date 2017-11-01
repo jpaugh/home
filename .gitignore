@@ -75,3 +75,4 @@ node_modules/
 opt/
 proj/
 tmp/
+.vboxclient-*
