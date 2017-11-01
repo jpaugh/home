@@ -7,6 +7,7 @@
 
 [diff]
     wordRegex = \\w+|[^\\w]
+	tool = meld
 
 [color]
     ui = true
@@ -48,6 +49,8 @@
     dw = diff --word-diff=color
     dcw = diff --cached --word-diff=color
     ds = diff --stat
+    guidiff = difftool -d
+    gdiff = difftool -d
     gconfig = config --global
 
     ff = merge --ff-only
