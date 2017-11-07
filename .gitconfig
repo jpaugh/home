@@ -43,13 +43,13 @@
     co = checkout
     pick = cherry-pick
     pickn = cherry-pick --no-commit
-    d  = diff
-    dc = diff --cached
-    dis= diff --ignore-space-change
-    dw = diff --word-diff=color
-    dcw = diff --cached --word-diff=color
-    dwi = diff --word-diff=color --ignore-space-change
-    dcwi = diff --cached --word-diff=color --ignore-space-change
+    d  = diff --ignore-space-change
+    dc = diff --cached --ignore-space-change
+    #dis= diff --ignore-space-change
+    dw = diff --word-diff=color --ignore-space-change
+    dcw = diff --cached --word-diff=color --ignore-space-change
+    #dwi = diff --word-diff=color --ignore-space-change
+    #dcwi = diff --cached --word-diff=color --ignore-space-change
     ds = diff --stat
     guidiff = difftool -d
     gdiff = difftool -d
