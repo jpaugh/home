@@ -156,6 +156,11 @@ beepx () {
     fi
 }
 
+grok () {
+    DIR=$1;shift
+    grep -IR "$@" "$DIR"
+}
+
 # Last mod time of a file or files
 get_file_timestamp () {
     ls -1 --time-style=+%s -l  "$@" | cut -f6 -d" "
