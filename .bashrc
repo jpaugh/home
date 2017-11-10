@@ -145,14 +145,14 @@ alias vi=vim
 #    fi
 #}
 
-# Tack on the end of a command line (`&& beepx`) to get status info when
+# Tack on the end of a command line (`; beepx`) to get status info when
 # the command ends
 # TODO: Learn how to do this with `notify-send`
 beepx () {
     if [ $? -gt 0 ]; then
-        beep
+        beep -D 100 -f 440 -r 1 -n -f 246.95
     else
-        beep -f
+        beep -D 100 -f 440 -r 1 -n -f 329.6
     fi
 }
 
