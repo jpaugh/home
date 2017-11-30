@@ -292,3 +292,107 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+BIB_APIKEY=4O4A2eA4iSv496GI4rla4aWNw3wHOACcMoXHQXuj
+##
+# Bible STuff
+bib-apicall () {
+    curl -L -u "$BIB_APIKEY:X" "http://bibles.org/v2$@" \
+        | jq '' | tee /tmp/bib-apicall-$RANDOM.json | jq -C '' | less -RXF
+}
+
+bib-search () {
+    local query excludeQuery book testament
+    local translation=ESV
+    local language=eng
+    local spell=yes
+    local joinOperator=all
+    local sortOrder=relevance
+    local offset=0
+    local limit=500
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            # Free-form values
+            -t|--translation)
+                shift
+                translation="$1"
+                ;;
+            -x|--exclude)
+                shift
+                excludeQuery="$1"
+                ;;
+            -l|--language)
+                shift;
+                language="$1"
+                ;;
+            -b|--book)
+                shift
+                book="$1"
+                ;;
+
+            -c|--canonical-sort)
+                sortOrder=canonical
+                ;;
+            -r|--relevance-sort)
+                sortOrder=relevance
+                ;;
+            -f|--offset)
+                shift
+                offset="$1"
+                ;;
+            -m|--limit)
+                shift
+                limit="$1"
+                ;;
+
+            # Spelling
+            -s|--spell)
+                spell=yes
+                ;;
+            -S|--no-spell)
+                spell=no
+                ;;
+
+            # Join Operator
+            -a|--and)
+                joinOperator=all
+                ;;
+            -o|--or)
+                joinOperator=any
+                ;;
+
+            # Testament
+            -e|--old|--old-testament)
+                testament="OT"
+                ;;
+            -n|--new|--new-testament)
+                testament="NT"
+                ;;
+            -d|--deuterocanonical)
+                testament="DEUT"
+                ;;
+            *)
+                if [[ -z $query ]]; then
+                    query="$1"
+                else
+                    query="$query+$1"
+                fi
+                ;;
+        esac
+        shift;
+    done
+    if [[ -z $query ]]; then
+        echo >&2 "Missing search query"
+        return 1
+    fi
+    local transString="$language-$translation"
+    params="query=$query&offset=$offset&limit=$limit"
+    params+="&version=$transString&language=$language"
+    params+="&precision=$joinOperator&sort_order=$sortOrder&spelling=$spell"
+    [[ -n $excludeQuery ]] && params+="&exclude=$excludeQuery"
+    [[ -n $book ]] && params+="&book=$transString:$book"
+    [[ -n $testament ]] && params+="&testament=$testament"
+
+    bib-apicall "/search.js?$params"
+}
