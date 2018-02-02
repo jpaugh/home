@@ -75,6 +75,7 @@
     llls = log --decorate --graph --pretty=full --stat --notes
     lllp = log --decorate --graph --pretty=full --patch --notes
     l1   = log --decorate --graph --pretty=full -1 --shortstat --notes
+    l1p   = log --decorate --graph --pretty=full -1 --shortstat --patch-with-stat --notes
     l5   = log --decorate --graph --oneline -5
 
     # Ideal for fixups or squashes
