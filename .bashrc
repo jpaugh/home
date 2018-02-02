@@ -396,3 +396,6 @@ bib-search () {
 
     bib-apicall "/search.js?$params"
 }
+if [ -e /home/jpaugh/.nix-profile/etc/profile.d/nix.sh ]; then
+    . /home/jpaugh/.nix-profile/etc/profile.d/nix.sh;
+fi # copied from .bash_profile
