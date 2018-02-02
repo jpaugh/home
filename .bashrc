@@ -118,7 +118,11 @@ JAVA_HOME="/opt/java/jdk"
 # Only show the last 3 directories in the path
 PROMPT_DIRTRIM=3
 
-export EDITOR LESS CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM JAVA_HOME
+# Unlimited history
+HISTSIZE=""
+HISTFILESIZE=""
+
+export EDITOR LESS CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM JAVA_HOME HISTSIZE HISTFILESIZE
 
 # For aliases that may need sudo to gain root priviledges
 SUDO=sudo
