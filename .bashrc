@@ -109,6 +109,7 @@ else    # Stuff that only needs to run the first time we source .bashrc.
 fi
 
 EDITOR=vim
+LESS='--ignore-case --chop-long-lines'
 CFLAGS="-O2 -fomit-frame-pointer -pipe"
 CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
 MAKEOPTS="-j3"
@@ -117,7 +118,7 @@ JAVA_HOME="/opt/java/jdk"
 # Only show the last 3 directories in the path
 PROMPT_DIRTRIM=3
 
-export EDITOR CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM JAVA_HOME
+export EDITOR LESS CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM JAVA_HOME
 
 # For aliases that may need sudo to gain root priviledges
 SUDO=sudo
@@ -127,6 +128,7 @@ $AM_ROOT && unset SUDO;
 alias g=git
 alias pdf='gui evince'
 alias myps='ps u -u $USER'
+alias less='less --LINE-NUMBERS'
 if [[ -x  $(which colordiff 2>/dev/null) ]]; then
     alias diff='colordiff -u'
 else
