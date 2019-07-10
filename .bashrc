@@ -79,9 +79,9 @@ else    # Stuff that only needs to run the first time we source .bashrc.
     # The following line in case the OS default is not sane; Commented
     # out because I trust Ubuntu more than Gentoo in this regard
     #PATH+=":/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/games/bin:/usr/local/games/bin"
-    PATH+=":$OLD_PATH"
-    PATH+=":/opt/neovim/latest/bin"
     PATH+=":/opt/ghc/bin"
+    PATH+=":/opt/neovim/latest/bin"
+    PATH+=":$OLD_PATH"
     export PATH
 
     alias _BASHRC_WAS_RUN=true
