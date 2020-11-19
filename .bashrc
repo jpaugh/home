@@ -175,7 +175,8 @@ get_file_timestamp () {
 
 # Make sure our version of the .bashrc file is up-to-date, or reload it.
 chk_bashrc_timestamp () {
-    if [[ "$_BASHRC_TIMESTAMP" -lt "$(get_file_timestamp "$HOME/.bashrc")" ]]; then
+    FILE="$(readlink -f "$HOME/.bashrc")"
+    if [[ "$_BASHRC_TIMESTAMP" -lt "$(get_file_timestamp "$FILE")" ]]; then
         echo >&2 "Reloading .bashrc..."
         . ~/.bashrc
     fi
