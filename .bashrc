@@ -422,3 +422,9 @@ bib-search () {
 if [ -e /home/jpaugh/.nix-profile/etc/profile.d/nix.sh ]; then
     . /home/jpaugh/.nix-profile/etc/profile.d/nix.sh;
 fi # copied from .bash_profile
+
+is_empty_dir () {
+    count="$(ls -A "$dest" | wc -l)"
+    # NB: Returns false for files, too
+    test "$count" -gt 0
+}
