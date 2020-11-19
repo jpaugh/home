@@ -432,3 +432,32 @@ is_empty_dir () {
     # NB: Returns false for files, too
     test "$count" -gt 0
 }
+
+# Print file name without an extension
+# Multiple files can be handle simultaneously; each name will be printed on a separate line.
+# --dots can be specified multiple times, and will apply from that point forward
+remove_file_extension () {
+    local dots=1
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -d|--dots)
+                [ $# -gt 1 ] || {
+                    __brc_error "--dots takes one argument"
+                    return 1
+                }
+                dots="$2";shift
+                ;;
+            *)
+                local filename="$1"
+                local i=$dots
+                local pattern=".*"
+                while [ $i -gt 1 ]; do
+                    pattern="$pattern"'.*'
+                    i=$((i-1))
+                done
+                echo "${filename%$pattern}"
+                ;;
+        esac
+        shift
+    done
+}
