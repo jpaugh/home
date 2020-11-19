@@ -428,7 +428,7 @@ if [ -e /home/jpaugh/.nix-profile/etc/profile.d/nix.sh ]; then
 fi # copied from .bash_profile
 
 is_empty_dir () {
-    count="$(ls -A "$dest" | wc -l)"
+    count="$(ls --almost-all "$dest" | wc --lines)"
     # NB: Returns false for files, too
     test "$count" -gt 0
 }
