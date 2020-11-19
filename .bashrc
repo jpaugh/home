@@ -211,7 +211,8 @@ __brc_message () {
 }
 
 __brc_todo() {
-    __brc_error "Not implemented"
+    [ $# -gt 0 ] && pre=": "
+    __brc_error "Not implemented$pre$@"
 }
 
 # don't put duplicate lines or lines starting with space in the history.
