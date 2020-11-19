@@ -499,15 +499,15 @@ unpack () {
         *.jar|*.zip)
             format="zip"
             ;;
-        *.t[gbx]z|*.tbz2)
-            format="tar"
-            ;;
-        *.tar|*.tar.gz|*.tar.bz2|*.tar.xz)
+        *.tar.gz|*.tar.bz2|*.tar.xz)
             format="tar"
             ext=2
             ;;
         *.tar.*)
             __brc_warn "Guessing extension length of two"
+            format="tar"
+            ;;
+        *.t[gbx]z|*.tbz2|.tar)
             format="tar"
             ;;
         *)
