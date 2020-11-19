@@ -466,7 +466,8 @@ remove_file_extension () {
 unpack () {
     archive="$1";shift
     dest_filesystem="$1";shift
-    source_name="$(remove_file_extension "$(basename "$archive")")"
+    [ -z "$dest_filesystem" ] && dest_filesystem="."
+    source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
     dest="$dest_filesystem/$source_name"
     [ $# -gt 0 ] && __brc_error "Too many arguments" && return 1
 
