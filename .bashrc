@@ -461,3 +461,84 @@ remove_file_extension () {
         shift
     done
 }
+
+# Unpack an archive intelligently
+unpack () {
+    archive="$1";shift
+    dest_filesystem="$1";shift
+    source_name="$(remove_file_extension "$(basename "$archive")")"
+    dest="$dest_filesystem/$source_name"
+    [ $# -gt 0 ] && __brc_error "Too many arguments" && return 1
+
+    mkdir -p "$dest_filesystem" || {
+        __brc_error "Can't create path \"$dest_filesystem\""
+        return 1
+    }
+
+    [ -e "$archive" ] || {
+        __brc_error "Can't find archive \"$archive\""
+        return 1
+    }
+    # Get absolute path to archive
+    archive="$(readlink -f "$archive")"
+
+    # If file exists, we need an empty directory
+    [ -e "$dest" ] && {
+        [ ! -d "$dest" ] && {
+            __brc_error "Refusing to clobber existing file \"$dest\""
+            return 1
+        }
+
+        is_empty_dir "$dest" && {
+            __brc_error "Destination not empty! \"$dest\""
+            return 1
+        }
+    }
+
+    ext=1
+    case $archive in
+        *.jar|*.zip)
+            format="zip"
+            ;;
+        *.t[gbx]z|*.tbz2)
+            format="tar"
+            ;;
+        *.tar|*.tar.gz|*.tar.bz2|*.tar.xz)
+            format="tar"
+            ext=2
+            ;;
+        *.tar.*)
+            __brc_warn "Guessing extension length of two"
+            format="tar"
+            ;;
+        *)
+            __brc_warn "Guessing archive type as tar-compatible"
+            format="tar"
+    esac
+
+    source_name="$(remove_file_extension "$(basename "$archive")")"
+    unpack_dir="$(mktemp --directory "$dest_filesystem/unpack_XXXX")"
+
+    case $format in
+        zip)
+            (cd "$unpack_dir"; unzip -q "$archive")
+            ;;
+        tar)
+            (cd "$unpack_dir"; tar xf "$archive")
+            ;;
+    esac
+
+    # Find the main directory
+    if [ ! -e "$unpack_dir/$source_name" ]; then
+        mv "$unpack_dir" "$dest"
+    else
+        mv "$unpack_dir/$source_name" "$dest"
+        # Copy over additional files
+        if is_empty_dir "$unpack_dir"; then
+            rmdir "$unpack_dir"
+        else
+            rootDir="$(mktemp --directory -u "$dest/archive-other-files_XXXX")"
+            mv "$unpack_dir" "$rootDir"
+        fi
+    fi
+}
