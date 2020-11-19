@@ -210,6 +210,10 @@ __brc_message () {
     echo >&2 -en "${COLOR[normal]}"
 }
 
+__brc_todo() {
+    __brc_error "Not implemented"
+}
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
