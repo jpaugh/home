@@ -428,9 +428,9 @@ if [ -e /home/jpaugh/.nix-profile/etc/profile.d/nix.sh ]; then
 fi # copied from .bash_profile
 
 is_empty_dir () {
-    count="$(ls --almost-all "$dest" | wc --lines)"
-    # NB: Returns false for files, too
-    test "$count" -gt 0
+    [ -d "$1" ] || return 1
+    count="$(ls --almost-all "$1" | wc --lines)"
+    test "$count" -gt 0 && return 1 || return 0
 }
 
 # Print file name without an extension
