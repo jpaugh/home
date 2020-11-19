@@ -490,7 +490,7 @@ unpack () {
             return 1
         }
 
-        is_empty_dir "$dest" && {
+        is_empty_dir "$dest" || {
             __brc_error "Destination not empty! \"$dest\""
             return 1
         }
