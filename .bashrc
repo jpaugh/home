@@ -467,8 +467,6 @@ unpack () {
     archive="$1";shift
     dest_filesystem="$1";shift
     [ -z "$dest_filesystem" ] && dest_filesystem="."
-    source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
-    dest="$dest_filesystem/$source_name"
     [ $# -gt 0 ] && __brc_error "Too many arguments" && return 1
 
     mkdir -p "$dest_filesystem" || {
@@ -517,7 +515,8 @@ unpack () {
             format="tar"
     esac
 
-    source_name="$(remove_file_extension "$(basename "$archive")")"
+    source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
+    dest="$dest_filesystem/$source_name"
     unpack_dir="$(mktemp --directory "$dest_filesystem/unpack_XXXX")"
 
     case $format in
