@@ -17,6 +17,7 @@ COLOR[normal]='\e[0m'
 COLOR[green]='\e[1;32m'
 COLOR[blue]='\e[1;34m'
 COLOR[red]='\e[1;31m'
+COLOR[yellow]='\e[1;33m'
 
 renameFunction () {
     local oldName="$1"; shift
@@ -194,6 +195,20 @@ prompt_cmd () {
 PROMPT_COMMAND=prompt_cmd
 
 cd "$SAVE_PWD"
+
+__brc_warn () {
+    __brc_message "${COLOR[yellow]}" "[WARNING]" "$@"
+}
+__brc_error () {
+    __brc_message "${COLOR[red]}" "[ERROR]" "$@"
+}
+
+__brc_message () {
+    MSG_COLOR="$1";shift
+    echo >&2 -en "$MSG_COLOR"
+    echo >&2 "$@"
+    echo >&2 -en "${COLOR[normal]}"
+}
 
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
