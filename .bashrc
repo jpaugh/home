@@ -463,6 +463,29 @@ remove_file_extension () {
     done
 }
 
+# Install a package to /opt
+install-opt-package () {
+    [ $# -eq 2 ] && local name="$1" && shift
+    local file="$1"
+
+    local INSTALL_LOCATION="/opt"
+
+    # Guess name from prefix
+    [ -z ${name+x} ] && { # ${name+x} learned from https://stackoverflow.com/a/13864829
+        local name=""
+        local bn="$(basename "$file")"
+        select name in "${bn%%-*}" "${bn%%.*}" "${bn%-*}" "${bn%%_*}" "${bn%_*}" "${bn%.*}" other; do
+            break
+        done
+        [ "$name" == "other" ] && read -er -i "${bn%%.*}" -p "custom name> " name
+    }
+
+    local dest="$INSTALL_LOCATION/$name"
+    echo "Unpacking to \"$dest\"..."
+    unpack "$file" "$dest" || return 1
+
+}
+
 # Unpack an archive intelligently
 unpack () {
     local archive="$1";shift
@@ -519,7 +542,6 @@ unpack () {
             return 1
         }
     }
-
 
     case $format in
         zip)
