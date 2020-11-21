@@ -480,9 +480,6 @@ unpack () {
         return 1
     }
 
-    # Get absolute path to archive
-    archive="$(readlink -f "$archive")"
-
     local ext=1
     local format=""
     case $archive in
@@ -505,6 +502,7 @@ unpack () {
             format="tar"
     esac
 
+    archive="$(readlink -f "$archive")"
     local source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
     local dest="$dest_filesystem/$source_name"
     local unpack_dir="$(mktemp --directory "$dest_filesystem/unpack_XXXX")"
