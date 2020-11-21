@@ -488,11 +488,21 @@ install-opt-package () {
 
 # Unpack an archive intelligently
 unpack () {
-    local archive="$1";shift
-    local dest_filesystem="$1";shift
-    [ -z "$dest_filesystem" ] && dest_filesystem="."
-    [ $# -gt 0 ] && __brc_error "Too many arguments" && return 1
+    local printDest=false
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            # Print the path to which an archive is extracted
+            -p|--print-output-path)
+                printDest=true
+                ;;
+            *)
+                [ -z "${archive:+}" ] && local archive="$1" || local dest_filesystem="$1"
+                ;;
+        esac
+        shift
+    done
 
+    [ -z "$dest_filesystem" ] && dest_filesystem="."
     mkdir -p "$dest_filesystem" || {
         __brc_error "Can't create path \"$dest_filesystem\""
         return 1
@@ -565,4 +575,6 @@ unpack () {
             mv "$unpack_dir" "$rootDir"
         fi
     fi
+
+    $printDest && echo "$dest"
 }
