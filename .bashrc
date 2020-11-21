@@ -482,19 +482,6 @@ unpack () {
     # Get absolute path to archive
     archive="$(readlink -f "$archive")"
 
-    # If file exists, we need an empty directory
-    [ -e "$dest" ] && {
-        [ ! -d "$dest" ] && {
-            __brc_error "Refusing to clobber existing file \"$dest\""
-            return 1
-        }
-
-        is_empty_dir "$dest" || {
-            __brc_error "Destination not empty! \"$dest\""
-            return 1
-        }
-    }
-
     ext=1
     case $archive in
         *.jar|*.zip)
@@ -519,6 +506,20 @@ unpack () {
     source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
     dest="$dest_filesystem/$source_name"
     unpack_dir="$(mktemp --directory "$dest_filesystem/unpack_XXXX")"
+
+    # If $dest exists, we need an empty directory
+    [ -e "$dest" ] && {
+        [ ! -d "$dest" ] && {
+            __brc_error "Refusing to clobber existing file \"$dest\""
+            return 1
+        }
+
+        is_empty_dir "$dest" || {
+            __brc_error "Destination not empty! \"$dest\""
+            return 1
+        }
+    }
+
 
     case $format in
         zip)
