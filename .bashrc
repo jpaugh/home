@@ -465,8 +465,8 @@ remove_file_extension () {
 
 # Unpack an archive intelligently
 unpack () {
-    archive="$1";shift
-    dest_filesystem="$1";shift
+    local archive="$1";shift
+    local dest_filesystem="$1";shift
     [ -z "$dest_filesystem" ] && dest_filesystem="."
     [ $# -gt 0 ] && __brc_error "Too many arguments" && return 1
 
@@ -479,10 +479,12 @@ unpack () {
         __brc_error "Can't find archive \"$archive\""
         return 1
     }
+
     # Get absolute path to archive
     archive="$(readlink -f "$archive")"
 
-    ext=1
+    local ext=1
+    local format=""
     case $archive in
         *.jar|*.zip)
             format="zip"
@@ -503,9 +505,9 @@ unpack () {
             format="tar"
     esac
 
-    source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
-    dest="$dest_filesystem/$source_name"
-    unpack_dir="$(mktemp --directory "$dest_filesystem/unpack_XXXX")"
+    local source_name="$(remove_file_extension --dots $ext "$(basename "$archive")")"
+    local dest="$dest_filesystem/$source_name"
+    local unpack_dir="$(mktemp --directory "$dest_filesystem/unpack_XXXX")"
 
     # If $dest exists, we need an empty directory
     [ -e "$dest" ] && {
@@ -539,7 +541,7 @@ unpack () {
         if is_empty_dir "$unpack_dir"; then
             rmdir "$unpack_dir"
         else
-            rootDir="$(mktemp --directory -u "$dest/archive-other-files_XXXX")"
+            local rootDir="$(mktemp --directory -u "$dest/archive-other-files_XXXX")"
             mv "$unpack_dir" "$rootDir"
         fi
     fi
