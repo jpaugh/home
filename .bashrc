@@ -465,8 +465,19 @@ remove_file_extension () {
 
 # Install a package to /opt
 install-opt-package () {
-    [ $# -eq 2 ] && local name="$1" && shift
-    local file="$1"
+    local setCurrent=false
+    while [ $# -gt 0 ]; do
+        case "$1" in
+            -c|--current)
+                setCurrent=true
+                ;;
+            *)
+                [ -z "${file+x}" ] || local name="$file"
+                local file="$1"
+                ;;
+        esac
+        shift
+    done
 
     local INSTALL_LOCATION="/opt"
 
@@ -481,8 +492,21 @@ install-opt-package () {
     }
 
     local dest="$INSTALL_LOCATION/$name"
+    mkdir -p "$dest"
+    [ -L "$dest/current" -o -L "$dest/latest" ] && {
+        __brc_warn "Not updating existing \"current\" symlink"
+    }
+
     echo "Unpacking to \"$dest\"..."
-    unpack "$file" "$dest" || return 1
+    local path="$(unpack --print-output-path "$file" "$dest" || return 1)"
+
+    $setCurrent && {
+        [ -L "$dest/latest" ] && {
+            __brc_warn "Removing obsolete \"latest\" symlink. \"current\" will be used instead"
+            rm "$dest/latest"
+        }
+        (cd "$dest"; ln -svf "$path" current)
+    }
 
 }
 
