@@ -468,6 +468,7 @@ install-opt-package () {
     local setCurrent=false
     while [ $# -gt 0 ]; do
         case "$1" in
+            # Update the current symlink to point to this new package version
             -c|--current)
                 setCurrent=true
                 ;;
@@ -493,21 +494,22 @@ install-opt-package () {
 
     local dest="$INSTALL_LOCATION/$name"
     mkdir -p "$dest"
-    [ -L "$dest/current" -o -L "$dest/latest" ] && {
-        __brc_warn "Not updating existing \"current\" symlink"
-    }
 
     echo "Unpacking to \"$dest\"..."
     local path="$(unpack --print-output-path "$file" "$dest" || return 1)"
 
-    $setCurrent && {
+    if $setCurrent; then
+        echo "Updating current..."
         [ -L "$dest/latest" ] && {
             __brc_warn "Removing obsolete \"latest\" symlink. \"current\" will be used instead"
             rm "$dest/latest"
         }
-        (cd "$dest"; ln -svf "$path" current)
-    }
-
+        (cd "$dest"; ln -svf "$path" "current")
+    else
+        $[ -L "$dest/current" -o -L "$dest/latest" ] && {
+            __brc_warn "Not updating existing \"current\" symlink"
+        }
+    fi
 }
 
 # Unpack an archive intelligently
