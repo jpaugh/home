@@ -77,3 +77,4 @@ opt/
 proj/
 tmp/
 .vboxclient-*
+.profile
