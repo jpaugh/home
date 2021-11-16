@@ -6,6 +6,10 @@ case $- in
       *) return;;
 esac
 
+[[ -e "$HOME/libbash/core.sh" ]] && {
+    source "$HOME/libbash/core.sh"
+}
+
 SAVE_PWD="$PWD"
 
 AM_ROOT=false
@@ -107,6 +111,8 @@ else    # Stuff that only needs to run the first time we source .bashrc.
         fi
     }
     export DEFAULT_CMD
+
+    loadsysprofile
 fi
 
 EDITOR=vim
