@@ -1,6 +1,5 @@
 *.iso
 *.lock
-.*/
 .*history
 .AndroidStudio*/
 .ICEauthority
