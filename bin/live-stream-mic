@@ -1,2 +1,0 @@
-#!/bin/sh
-exec avconv -f pulse -i default -ac 1 -re -f alsa default

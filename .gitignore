@@ -1,6 +1,5 @@
 *.iso
 *.lock
-.*/
 .*history
 .AndroidStudio*/
 .ICEauthority
@@ -77,3 +76,4 @@ opt/
 proj/
 tmp/
 .vboxclient-*
+.profile
