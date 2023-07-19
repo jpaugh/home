@@ -1,0 +1,266 @@
+set nocompatible        " Vim-mode. Must be first
+set exrc                " Allow a .vimrc file in the current directory
+
+"""""""""""""
+" UI
+"""""""""""""
+set hidden		" Buffers prefer to be hidden, instead of inactive
+set ruler		" Show the cursor position in the status line
+set confirm             " Confirm dangerous actions instead of asking for a !
+set history=10000       " Keep lots of command-line history
+set showcmd		" Display partial command in status line as you build it
+set incsearch		" do incremental searching
+set hlsearch            " Turn on search highlighting
+set splitright splitbelow " Make new windows come up in the right spot
+set number "relativenumber " Line numbering
+set scrolloff=2		" Number of lines to keep above or below the cursor onscreen
+set laststatus=1        " Status line only for multiple windows
+                        " This is the default in Vim, but not NeoVim
+set display=lastline,uhex " A few display settings
+set ttyfast             " More performant scrolling, but with heavier
+                        " tty usage
+
+" In many terminal emulators the mouse works just fine
+if has('mouse')
+  set mouse=a
+endif
+
+" Switch syntax highlighting on, when the terminal has colors
+if &t_Co > 2 || has("gui_running")
+  syntax on
+endif
+
+if has("gui_running")
+  colorscheme desert
+endif
+
+
+"""""""""""""
+" Backups
+"""""""""""""
+set backup                          " keep a backup file
+set backupdir=~/.vim/backupdir,.    " put the backup out of the way
+set patchmode=".orig"               " Only backup the original
+
+"""""""""""""
+" Sessions
+"""""""""""""
+" What gets saved with ':mksession' command?
+set sessionoptions=blank,buffers,curdir,folds,help,localoptions,options,resize,tabpages,winpos,winsize
+" blank     empty windows
+" buffers   hidden/unloaded buffers (those not in a window currently)
+" curdir    current dir
+" folds     Manually created folds, as well as open/close state
+" help      Help window(s)
+" locaoptions Local options (e.g. lcd)
+" options   Global options/mappings
+" resize    Size of Vim
+" tabpages  All tabs; without this, you can (must) save each tab separately
+" winpos    Window position of Vim
+" winsize   Size of windows
+
+
+"""""""""""""
+" Autocommand setup
+"""""""""""""
+autocmd! " Delete all autocommands. Allows re-loading the vimrc file
+
+" Enable file type detection.
+" Use the default filetype settings, so that mail gets 'tw' set to 72,
+" 'cindent' is on in C files, etc.
+" Also load indent files, to automatically do language-dependent indenting.
+filetype plugin indent on
+syntax enable
+
+" Use this to skip common scenarios where you know exactly what to do already
+"autocmd SwapExists * TODO
+
+" Autosave the last session
+autocmd VimLeave * mksession! ~/.vim/sessions/last.vim
+
+"""""""""""""
+" Editing Defaults
+"""""""""""""
+set encoding=utf-8              " Prefer UTF-8 encoding
+set backspace=indent,eol,start  " Allow backspacing over everything in insert mode
+set linebreak		        " word-wrap long lines instead of char-wrapping
+set expandtab		        " Expand tabs into the right number of spaces
+"set tildeop		         " ~ command accepts a motion (like delete or change do)
+
+set wildmenu            " Enhanced command-line completion
+"set wildmode=longest:full,full
+set wildmode=list:longest,full " Set completion behavior
+"   list        On tab, show menu if it's available
+"   :lastused   Sort menu by most recently used
+"   :longest    Complete the longest common match
+"   ,full       On another tab, use the next complete match in the list
+
+set wildoptions=fuzzy,tagfile
+"   fuzzy       Use fuzzy matching, and change match sort order
+"   tagfile     Include extra info with Ctrl+D list
+
+" Open each file to the last known line position
+autocmd BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+
+
+"""""""""""""
+" Formatting and line wrapping
+"""""""""""""
+"" Defaults
+set autoindent textwidth=78 shiftwidth=4 softtabstop=4
+set formatoptions=cqjroqn
+"   t   autowrap text
+"   c   autowrap comments
+"   j   remove comment leader (e.g. //) when joining lines
+"   r   auto insert comment leader with i<Enter>
+"   o   auto insert comment leader with o or O
+"   q   format comments with gq, too
+"   n   wrap lists (e.g. "1.", "1)") (Uses 'formatlistpat')
+
+" Pattern used to find lists for set fo+=n, above. This adds bullet
+" lists (beginning with * or -) to the default numbered lists
+let &formatlistpat="^\s*\d\+[\]:.)}\t ]\s*\|^\s*[-*]\s+"
+let &formatlistpat=string(&formatlistpat)
+" :let &option= sets an option just like the :set command
+
+"" Filetype-specific
+autocmd FileType text setlocal formatoptions+=t " Apply text width to all text
+autocmd FileType text setlocal textwidth=78
+autocmd FileType gitcommit setlocal textwidth=72 " Follow git recommendation
+autocmd FileType html setlocal textwidth=0 shiftwidth=2
+
+
+"""""""""""""
+" Search
+"""""""""""""
+set gdefault            " %s/// replaces all matches; /g turns it back off
+
+
+"""""""""""""
+" NeoVim-only settings
+"""""""""""""
+if has("nvim")
+    set nrformats=bin,octal,hex " Which number formats work with ^A and ^X?
+    set shada=!,'1000,f1,<500,s100,h
+    "   !       Store certain global variables (ALL_CAPS)
+    "   'n      Save marks (a-z) for n files
+    "   f1      Save global marks
+    "   <n      Save up to n lines from each register
+    "   sn      Items bigger than n KiB are not saved
+    "   h       Disable hlsearch highlighting
+end
+
+
+"""""""""""""
+" Keyboard Mappings
+"""""""""""""
+
+" Note: When mapping special keys, use CTRL-K <F1> instead of CTRL-V <F1>. 
+" CTRL-K works uniformly in GVim and in the Windows and Linux terminals.
+" Meanwhile CTRL-V has different behavior in each, and its results cannot be
+" interpreted correctly by the others.
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" NOTE: F4-F6, F8 reserved for per-filetype definitions
+
+" Redefine the help binding to be more useful
+map <silent> <F1> :tabe \| set buftype=help \| help
+" C-F1 for gnome-terminal, which overrides <F1>
+map <silent> <C-F1> :tabe \| set buftype=help \| help
+map <silent> <S-F1> :vertical help
+" map <silent> <S-F1> :help
+
+" Clear search pattern
+map <silent> <F2> :let @/ = ""
+" Search for (git/svn) merge conflicts
+map <silent> <S-F2> /^\v[<=\|>]{7}
+
+" Toggle spell checking
+map <silent> <F7> :set spell!
+
+" Traverse Make errors
+map <silent> <F9> :cnext
+map <silent> <S-F9> :cprevious
+
+" Open/Close tagbar, a ctags plugin
+map <silent> <F10> :TagbarToggle
+" Refresh tags list
+map <silent> <S-F10> :!ctags -R
+
+" Delete extra spaces at the end of lines
+map <silent> <F11> :%s/\v\s+$//
+
+" Open the vimrc file for editing
+map <silent> <expr> <F12> :tabe ~/.vim/vimrc 
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+fun! HaskellMappings ()
+    " Set up keymappings for Haskell code
+    " Run via autocommand later
+
+    " Clear type highlighting
+    map <buffer> <silent> <M-F2> :GhcModTypeClear
+
+    " Display expresion type (and highlight the expression) 
+    map <buffer> <F5> :GhcModType!
+    " Insert the expression type
+    map <buffer> <S-F5> :GhcModTypeInsert!
+    " Display expression Info
+    map <buffer> <C-F5> :GhcModInfo!
+
+    " Use hasktags instead of ctags
+    map <silent> <buffer> <S-F10> :!hasktags -c .
+endfun
+autocmd FileType haskell call HaskellMappings()
+
+
+"""""""""""""
+" Filetype handling
+"""""""""""""
+autocmd BufNewFile,BufReadPre *.nut setfiletype cpp
+autocmd BufNewFile,BufReadPre *.coffee setfiletype coffee
+autocmd BufNewFile,BufReadPre *.md setfiletype markdown
+autocmd BufNewFile,BufReadPre *.less setfiletype less
+autocmd BufNewFile,BufReadPre *.cmm setfiletype c
+autocmd BufNewFile,BufReadPre *.hamlet setfiletype hamlet
+
+
+"""""""""""""
+" Vim Addon Manager (VAM)
+"""""""""""""
+fun! SetupVAM()
+  let c = get(g:, 'vim_addon_manager', {})
+  let g:vim_addon_manager = c
+  let c.plugin_root_dir = expand('$HOME', 1) . '/.vim/vim-addons'
+
+  " Force your ~/.vim/after directory to be last in &rtp always:
+  " let g:vim_addon_manager.rtp_list_hook = 'vam#ForceUsersAfterDirectoriesToBeLast'
+
+  " most used options you may want to use:
+  " let c.log_to_buf = 1
+  " let c.auto_install = 0
+  let &rtp.=(empty(&rtp)?'':',').c.plugin_root_dir.'/vim-addon-manager'
+  if !isdirectory(c.plugin_root_dir.'/vim-addon-manager/autoload')
+    execute '!git clone --depth=1'
+        \       'https://github.com/MarcWeber/vim-addon-manager'
+        \       shellescape(c.plugin_root_dir.'/vim-addon-manager', 1)
+  endif
+
+  " This provides the VAMActivate command, you could be passing plugin names, too
+  call vam#ActivateAddons([], {})
+endfun
+call SetupVAM()
+
+
+"""""""""""""
+" Imports
+"""""""""""""
+source "abbreviations.vim"
