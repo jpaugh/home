@@ -197,7 +197,7 @@ map <silent> <S-F10> :!ctags -R
 map <silent> <F11> :%s/\v\s+$//
 
 " Open the vimrc file for editing
-map <silent> <expr> <F12> :tabe ~/.vim/vimrc 
+map <silent> <F12> :tabe ~/.vim/vimrc 
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
