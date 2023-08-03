@@ -157,5 +157,3 @@
 
 [github]
     user = jpaugh64
-[rebase]
-    autosquash = True
