@@ -3,6 +3,17 @@ git_branch_exists() {
   branch="$1";shift
   git rev-parse --verify "refs/heads/$branch" 2>/dev/null 1>&2
 }
+git_ref_exists() {
+    ref="$1";shift
+    git rev-parse --verify "$ref" 2>/dev/null 1>&2
+}
+
+git_is_same_commit() {
+    local refA="$1"; shift
+    local refB="$1"; shift
+
+    [[ "$(git rev-parse "$refA" 2>/dev/null)" == "$(git rev-parse "$refB" 2>/dev/null)" ]]
+}
 
 git_ensure_clean_worktree() {
   local allow_unclean_index=false
@@ -21,4 +32,16 @@ git_ensure_clean_worktree() {
     echo >&2 "Aborting. Untracked files detected"
     exit 1
   }
+}
+
+git_print_git_dir() {
+    git rev-parse --git-dir
+}
+
+git_print_toplevel() {
+    git rev-parse --show-toplevel
+}
+
+git_is_ancestor() {
+    git merge-base --is-ancestor "$@"
 }
