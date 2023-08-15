@@ -4,6 +4,7 @@
 [core]
     excludesfile = ~/.gitglobalignore
     pager = "less -RFX"
+    editor = vim
 
 [diff]
     wordRegex = \\w+|[^\\w]
@@ -77,6 +78,8 @@
     l1   = log --decorate --graph --pretty=full -1 --shortstat --notes
     l1p   = log --decorate --graph --pretty=full -1 --shortstat --patch-with-stat --notes
     l5   = log --decorate --graph --oneline -5
+    l10   = log --decorate --graph --oneline -10
+    l15   = log --decorate --graph --oneline -15
 
     # Ideal for fixups or squashes
     lfix = log -1 '--pretty=format:fixup! %s'
@@ -154,5 +157,3 @@
 
 [github]
     user = jpaugh64
-[rebase]
-    autosquash = True
