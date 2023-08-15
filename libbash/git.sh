@@ -45,3 +45,28 @@ git_print_toplevel() {
 git_is_ancestor() {
     git merge-base --is-ancestor "$@"
 }
+
+git_get_refs_by_pattern() {
+    # git_get_refs_by_prefix PATTERN
+    # List all references which start with PATTERN.
+    # PATTERN is a PCRE regex
+    declare -a show_ref_args
+    local pattern=".*"
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --head|--heads|--tags)
+                show_ref_args+=("$1")
+                ;;
+            *)
+                pattern="$1"; shift
+                break
+                ;;
+        esac
+        shift
+    done
+    [[ $# -gt 0 ]] && {
+        echo >&2 "Ignoring extra arguments: '$@'"
+    }
+
+    git show-ref "${show_ref_args[@]}" | cut -f2-9999 -d' ' | $(which grep) --perl-regexp "${pattern}"
+}
