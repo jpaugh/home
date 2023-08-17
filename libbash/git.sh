@@ -1,5 +1,5 @@
 #!/bin/bash
-git_branch_exists() {
+git_local_branch_exists() {
   branch="$1";shift
   git rev-parse --verify "refs/heads/$branch" 2>/dev/null 1>&2
 }
