@@ -8,6 +8,10 @@ git_ref_exists() {
     git rev-parse --verify "$ref" 2>/dev/null 1>&2
 }
 
+git_print_branch_checked_out() {
+    git branch --show-current
+}
+
 git_is_same_commit() {
     local refA="$1"; shift
     local refB="$1"; shift
