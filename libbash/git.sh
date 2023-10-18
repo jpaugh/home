@@ -21,7 +21,7 @@ git_is_same_commit() {
 
 git_ensure_clean_worktree() {
   local allow_unclean_index=false
-  [[ "$1" = "--allow-unclean-index" ]] && allow_unclean_index=true
+  [[ "$1" == "--allow-unclean-index" ]] && allow_unclean_index=true
   $allow_unclean_index || git diff-index --quiet --cached HEAD -- || {
     echo >&2 "Aborting. Git index does not match HEAD"
     exit 1
