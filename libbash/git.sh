@@ -46,6 +46,76 @@ git_print_toplevel() {
     git rev-parse --show-toplevel
 }
 
+git_most_recent_ancestors_among() {
+    local tip="$1"; shift
+    local errorListBranches="$@"
+    declare -a ancestors
+    local filterAncestors="$(git_ancestors_among "$tip" "$@")"
+    IFS=" " ancestors=($filterAncestors)
+
+    [[ ${#ancestors[@]} -gt 0 ]] || {
+        echo >&2 "No ancestors found for '$tip' among ($errorListBranches)"
+        return 1
+    }
+
+    # Short-circuit in trivial case
+    [[ ${#ancestors[@]} -eq 1 ]] && {
+        echo "${ancestors[0]}"
+        return
+    }
+
+    # Find all branches which aren't ancestors of other ancestors --
+    # So-called "young" ancestors
+    declare -a youngAncestors
+    local last=$(( ${#ancestors[@]} - 1 ))
+    for index in $(eval echo {0..$last}); do
+        local branch="${ancestors[index]}"
+        local descendants="$(git_descendants_among "$branch" "${ancestors[@]}")"
+
+        if [[ -z $descendants ]]; then
+            youngAncestors+=("$branch")
+        fi
+    done
+    echo "${youngAncestors[@]}"
+
+}
+
+git_ancestors_among() {
+    local tip="$1"; shift
+    declare -a ancestors
+
+    while [[ $# -gt 0 ]]; do
+        local base="$1"; shift
+        if [[ "$base" == "$tip" ]]; then
+            continue # Skip duplicates
+        fi
+
+        if git_is_ancestor "$base" "$tip"; then
+            ancestors+=("$base")
+        fi
+    done
+
+    echo "${ancestors[@]}"
+}
+
+git_descendants_among() {
+    local base="$1"; shift
+    declare -a descendants
+
+    while [[ $# -gt 0 ]]; do
+        local tip="$1"; shift
+        if [[ "$base" == "$tip" ]]; then
+            continue # Skip duplicates
+        fi
+
+        if git_is_ancestor "$base" "$tip"; then
+            descendants+=("$tip")
+        fi
+    done
+
+    echo "${descendants[@]}"
+}
+
 git_is_ancestor() {
     git merge-base --is-ancestor "$@"
 }
