@@ -1,8 +1,19 @@
 #!/bin/bash
 git_local_branch_exists() {
-  local branch="$1";shift
-  git rev-parse --verify "refs/heads/$branch" 2>/dev/null 1>&2
+    __git_exists_helper "refs/heads/" "$@"
 }
+
+git_tag_exists() {
+    __git_exists_helper "refs/tags/"
+}
+
+__git_exists_helper() {
+    local prefix="$1"; shift
+    local name="$1"; shift
+    git rev-parse --verify "${prefix}${name}" 2>/dev/null 1>&2
+}
+
+
 git_ref_exists() {
     local ref="$1";shift
     git rev-parse --verify "$ref" 2>/dev/null 1>&2
