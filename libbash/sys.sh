@@ -7,7 +7,7 @@ getOS () {
 SYSNAME="$(getOS)"
 
 loadsysprofile () {
-    local SYSNAME_FILE="${SYSNAME//\//_}"
+    local SYSNAME_FILE="$(path_to_filename "$SYSNAME")"
     echo "Loading system profile for $SYSNAME"
     import "sys/$SYSNAME_FILE"
 }

@@ -11,3 +11,7 @@ import () {
         fi
     done
 }
+
+path_to_filename () {
+  echo ${@//\//_}
+}
