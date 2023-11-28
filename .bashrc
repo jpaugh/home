@@ -38,7 +38,11 @@ __set_vars() {
     CFLAGS="-O2 -fomit-frame-pointer -pipe"
     CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
     MAKEOPTS="-j3"
-    JAVA_HOME="/opt/java/jdk"
+
+    # JAVA_EXEC will take the form ".../something/bin/java", where
+    # "something" is the JAVA_HOME
+    local JAVA_EXEC="$(readlink -f "$(which java)")"
+    JAVA_HOME="$(dirname "$(dirname "$JAVA_EXEC")")"
 
     # Only show the last 3 directories in the path of PS1, PS2, etc
     PROMPT_DIRTRIM=3
