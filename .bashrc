@@ -203,6 +203,14 @@ __do_external_setup() {
     fi
 }
 
+__load_nvm () {
+  export NVM_DIR="$HOME/.nvm"
+  # Load nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  # Load nvm bash_completion
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
+
 
 if _BASHRC_WAS_RUN 2>/dev/null; then
     :;
@@ -216,6 +224,7 @@ else
     __set_command_not_found_handle
     loadsysprofile
     __do_external_setup
+    __load_nvm
 fi
 
 __set_shellopts
