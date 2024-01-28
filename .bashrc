@@ -225,6 +225,8 @@ else
     loadsysprofile
     __do_external_setup
     __load_nvm
+    # Load Rust
+    [ -e "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 fi
 
 __set_shellopts
