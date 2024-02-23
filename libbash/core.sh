@@ -34,12 +34,12 @@ set_module_loadstate() {
 }
 
 is_module_loaded() {
-    local loadstate = get_module_loadstate "$@"
+    local loadstate="$(get_module_loadstate "$@")"
     [[ $loadstate == "true" ]]
 }
 
 did_try_load_module() {
-    local loadstate = get_module_loadstate "$@"
+    local loadstate="$(get_module_loadstate "$@")"
     [[ -n $loadstate ]]
 }
 
