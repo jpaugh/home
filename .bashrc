@@ -32,7 +32,7 @@ __set_path() {
 }
 
 __set_vars() {
-    EDITOR=vim
+    EDITOR=nvim
     LESS='--ignore-case --chop-long-lines'
     CFLAGS="-O2 -fomit-frame-pointer -pipe"
     CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
@@ -69,7 +69,7 @@ __set_ls_color() {
 
 __set_aliases() {
     # Add a $SUDO variable that allows alias definitions to escalate to
-    # root. Works fine if the user already is root, too. 
+    # root. Works fine if the user already is root, too.
     local SUDO="sudo"
     isRootUser && unset SUDO
 
@@ -103,6 +103,10 @@ __set_aliases() {
     fi
 
     [ -f ~/.bash_aliases ] && . ~/.bash_aliases
+
+    alias vi=nvim
+    alias vim=nvim
+    alias oldvim=vim
 }
 
 __set_shellopts() {
