@@ -32,7 +32,13 @@ __set_path() {
 }
 
 __set_vars() {
-    EDITOR=nvim
+    if [[ -z "$NO_NVIM" ]]; then
+      VIM=nvim
+    else
+      VIM=vim
+    fi
+    EDITOR="$VIM"
+
     LESS='--ignore-case --chop-long-lines'
     CFLAGS="-O2 -fomit-frame-pointer -pipe"
     CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
@@ -104,8 +110,8 @@ __set_aliases() {
 
     [ -f ~/.bash_aliases ] && . ~/.bash_aliases
 
-    alias vi=nvim
-    alias vim=nvim
+    alias vi="$VIM"
+    alias vim="$VIM"
     alias oldvim=vim
 }
 
