@@ -257,3 +257,24 @@ prompt_cmd () {
     chk_bashrc_timestamp
 }
 PROMPT_COMMAND=prompt_cmd
+
+fyrox-edit () {
+  local sleep_seconds=0.3
+  # Cache the build to avoid a pre-mature timeout
+  cargo build --profile dev --package editor
+
+  # Schedule the DPI settings to go back to normal after a few seconds
+  __kludge_fyrox_editor "$sleep_seconds" &
+  sleep 0.1
+  # Set scale factor 1.0 for Fyrox and proceed
+  gsettings set org.gnome.desktop.interface text-scaling-factor 1.0
+  cargo run --profile dev --package editor
+}
+
+__kludge_fyrox_editor () {
+  # Reset scale factor to the default after a few seconds
+  local sleep_seconds="$1";shift
+  local correct_scale_factor=$(gsettings get org.gnome.desktop.interface text-scaling-factor)
+  sleep "$sleep_seconds"
+  gsettings set org.gnome.desktop.interface text-scaling-factor "$correct_scale_factor"
+}
