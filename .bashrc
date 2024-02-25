@@ -1,8 +1,6 @@
 #!/bin/bash
 [[ -f "$HOME/libbash/core.sh"  ]] && . "$HOME/libbash/core.sh" || {
     echo >&2 "Cannot load libbash"
-    read -p "Press any key to continue..."
-    exit 1
 }
 import sys script
 import shell
