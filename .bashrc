@@ -200,6 +200,9 @@ __do_external_setup() {
         . /etc/bash_completion
       fi
     fi
+
+    eval "$(zoxide init bash)"
+    aliasIfExecutable z cd
 }
 
 
@@ -244,6 +247,7 @@ prompt_cmd () {
     if [ $err -gt 0 ]; then
         echo >&2 -e "Error code: ${COLOR[red]}$err${COLOR[normal]}"
     fi
+    __zoxide_hook
     chk_bashrc_timestamp
 }
 PROMPT_COMMAND=prompt_cmd
