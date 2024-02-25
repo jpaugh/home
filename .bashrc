@@ -50,7 +50,8 @@ __set_vars() {
 
     # JAVA_EXEC will take the form ".../something/bin/java", where
     # "something" is the JAVA_HOME
-    local JAVA_EXEC="$(readlink -f "$(which java)")"
+    local JAVA_EXEC="$(readlink -f "$(which java 2>/dev/null)")"
+    JAVA_EXEC="${JAVA_EXEC:-/opt/java/jdk/bin/java}"
     JAVA_HOME="$(dirname "$(dirname "$JAVA_EXEC")")"
 
     # Only show the last 3 directories in the path of PS1, PS2, etc
