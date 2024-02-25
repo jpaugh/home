@@ -36,12 +36,22 @@ __set_path() {
 }
 
 __set_vars() {
-    EDITOR=vim
+    if [[ -z "$NO_NVIM" ]]; then
+      VIM=nvim
+    else
+      VIM=vim
+    fi
+    EDITOR="$VIM"
+
     LESS='--ignore-case --chop-long-lines'
     CFLAGS="-O2 -fomit-frame-pointer -pipe"
     CXXFLAGS="-O2 -fomit-frame-pointer -pipe"
     MAKEOPTS="-j3"
-    JAVA_HOME="/opt/java/jdk"
+
+    # JAVA_EXEC will take the form ".../something/bin/java", where
+    # "something" is the JAVA_HOME
+    local JAVA_EXEC="$(readlink -f "$(which java)")"
+    JAVA_HOME="$(dirname "$(dirname "$JAVA_EXEC")")"
 
     # Only show the last 3 directories in the path of PS1, PS2, etc
     PROMPT_DIRTRIM=3
@@ -69,7 +79,7 @@ __set_ls_color() {
 
 __set_aliases() {
     # Add a $SUDO variable that allows alias definitions to escalate to
-    # root. Works fine if the user already is root, too. 
+    # root. Works fine if the user already is root, too.
     local SUDO="sudo"
     isRootUser && unset SUDO
 
@@ -103,6 +113,10 @@ __set_aliases() {
     fi
 
     [ -f ~/.bash_aliases ] && . ~/.bash_aliases
+
+    alias vi="$VIM"
+    alias vim="$VIM"
+    alias oldvim=vim
 }
 
 __set_shellopts() {
@@ -205,6 +219,14 @@ __do_external_setup() {
     aliasIfExecutable z cd
 }
 
+__load_nvm () {
+  export NVM_DIR="$HOME/.nvm"
+  # Load nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  # Load nvm bash_completion
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}
+
 
 if _BASHRC_WAS_RUN 2>/dev/null; then
     :;
@@ -218,6 +240,9 @@ else
     __set_command_not_found_handle
     loadsysprofile
     __do_external_setup
+    __load_nvm
+    # Load Rust
+    [ -e "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 fi
 
 __set_shellopts
@@ -251,3 +276,24 @@ prompt_cmd () {
     chk_bashrc_timestamp
 }
 PROMPT_COMMAND=prompt_cmd
+
+fyrox-edit () {
+  local sleep_seconds=0.3
+  # Cache the build to avoid a pre-mature timeout
+  cargo build --profile dev --package editor
+
+  # Schedule the DPI settings to go back to normal after a few seconds
+  __kludge_fyrox_editor "$sleep_seconds" &
+  sleep 0.1
+  # Set scale factor 1.0 for Fyrox and proceed
+  gsettings set org.gnome.desktop.interface text-scaling-factor 1.0
+  cargo run --profile dev --package editor
+}
+
+__kludge_fyrox_editor () {
+  # Reset scale factor to the default after a few seconds
+  local sleep_seconds="$1";shift
+  local correct_scale_factor=$(gsettings get org.gnome.desktop.interface text-scaling-factor)
+  sleep "$sleep_seconds"
+  gsettings set org.gnome.desktop.interface text-scaling-factor "$correct_scale_factor"
+}

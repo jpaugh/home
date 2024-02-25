@@ -9,6 +9,7 @@ import () {
         did_try_load_module "$module_name" && return
 
         if [[ -f "$LIBBASHDIR/$f.sh" ]]; then
+            declare "__import_${fname}=true"
             source "$LIBBASHDIR/$f.sh"
             set_module_loadstate "$module_name" true
         else
@@ -16,6 +17,10 @@ import () {
             set_module_loadstate "$module_name" false
         fi
     done
+}
+
+path_to_filename () {
+  echo ${@//\//_}
 }
 
 if [[ -z "$__LIBBASH_CORE_IS_LOADED" ]]; then
