@@ -1,6 +1,7 @@
 #!/bin/bash
 [[ -f "$HOME/libbash/core.sh"  ]] && . "$HOME/libbash/core.sh" || {
     echo >&2 "Cannot load libbash"
+    exit 1
 }
 import sys script
 import shell
@@ -12,11 +13,12 @@ SAVE_PWD="$PWD"
 __set_path() {
     OLD_PATH="$PATH"
     PATH="$HOME/bin"
+    PATH+=":$HOME/.cargo/bin"
     PATH+=":$HOME/.local/bin"
     PATH+=":$HOME/node_modules/.bin"    # npm/node
     PATH+=":/usr/local/heroku/bin" # Heroku Toolbelt
     PATH+=":$HOME/.cabal/bin"       # Haskell / Cabal
-    PATH+=":/opt/java/jre/bin::/opt/java/jdk/bin" # Java
+    PATH+=":/opt/java/jre/bin:/opt/java/jdk/bin" # Java
     PATH+=":/opt/maven/latest/bin"  # Maven
     #PATH+="$HOME/.gem/ruby/2.1.0/bin"
     #PATH+=":$HOME/build/gradle/gradle-2.3/bin"
@@ -28,6 +30,8 @@ __set_path() {
     PATH+=":/opt/neovim/latest/bin"
     PATH+=":/opt/ghc/bin"
     PATH+=":$OLD_PATH"
+    PATH+=":/c/Program Files/nodejs"
+    PATH+=":/mingw64/bin"
     export PATH
 }
 
@@ -46,7 +50,8 @@ __set_vars() {
 
     # JAVA_EXEC will take the form ".../something/bin/java", where
     # "something" is the JAVA_HOME
-    local JAVA_EXEC="$(readlink -f "$(which java)")"
+    local JAVA_EXEC="$(readlink -f "$(which java 2>/dev/null)")"
+    JAVA_EXEC="${JAVA_EXEC:-/opt/java/jdk/bin/java}"
     JAVA_HOME="$(dirname "$(dirname "$JAVA_EXEC")")"
 
     # Only show the last 3 directories in the path of PS1, PS2, etc
@@ -185,9 +190,10 @@ __set_shell_prompt() {
     local userHost="\[${COLOR[darkgreen]}\]\u@\h"
     local sysname="\[${COLOR[mutemagenta]}\]$SYSNAME"
     local directory="\[${COLOR[muteyellow]}\]\w\[${COLOR[normal]}\]"
+    local date='[`date +%H:%M`]'
     local prompt="\n\$ "
 
-    export PS1="$winTitle$userHost $sysname $directory$prompt"
+    export PS1="$winTitle$date $sysname $directory$prompt"
 }
 
 __do_external_setup() {
@@ -209,6 +215,9 @@ __do_external_setup() {
         . /etc/bash_completion
       fi
     fi
+
+    eval "$(zoxide init bash)"
+    aliasIfExecutable z cd
 }
 
 __load_nvm () {
@@ -264,6 +273,7 @@ prompt_cmd () {
     if [ $err -gt 0 ]; then
         echo >&2 -e "Error code: ${COLOR[red]}$err${COLOR[normal]}"
     fi
+    __zoxide_hook
     chk_bashrc_timestamp
 }
 PROMPT_COMMAND=prompt_cmd
