@@ -175,9 +175,10 @@ __set_shell_prompt() {
     local userHost="\[${COLOR[darkgreen]}\]\u@\h"
     local sysname="\[${COLOR[mutemagenta]}\]$SYSNAME"
     local directory="\[${COLOR[muteyellow]}\]\w\[${COLOR[normal]}\]"
+    local date='[`date +%H:%M`]'
     local prompt="\n\$ "
 
-    export PS1="$winTitle$userHost $sysname $directory$prompt"
+    export PS1="$winTitle$date $sysname $directory$prompt"
 }
 
 __do_external_setup() {
