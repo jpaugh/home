@@ -22,3 +22,12 @@ if isShellColorable; then
     COLOR[magenta]='\e[1;35m'
     COLOR[muteyellow]='\e[1;33m'
 fi
+
+aliasIfExecutable() {
+    local executable="$1"; shift
+    local alias="$1"; shift
+    local args="$1"; shift
+
+    type -t "$executable" >/dev/null || return
+    alias "$alias"="'$executable' $args" 
+}
