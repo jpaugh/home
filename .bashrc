@@ -13,6 +13,7 @@ SAVE_PWD="$PWD"
 __set_path() {
     OLD_PATH="$PATH"
     PATH="$HOME/bin"
+    PATH+=":$HOME/.cargo/bin"
     PATH+=":$HOME/.local/bin"
     PATH+=":$HOME/node_modules/.bin"    # npm/node
     PATH+=":/usr/local/heroku/bin" # Heroku Toolbelt
@@ -29,6 +30,8 @@ __set_path() {
     PATH+=":/opt/neovim/latest/bin"
     PATH+=":/opt/ghc/bin"
     PATH+=":$OLD_PATH"
+    PATH+=":/c/Program Files/nodejs"
+    PATH+=":/mingw64/bin"
     export PATH
 }
 
