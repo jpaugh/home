@@ -18,7 +18,7 @@ __set_path() {
     PATH+=":$HOME/node_modules/.bin"    # npm/node
     PATH+=":/usr/local/heroku/bin" # Heroku Toolbelt
     PATH+=":$HOME/.cabal/bin"       # Haskell / Cabal
-    PATH+=":/opt/java/jre/bin::/opt/java/jdk/bin" # Java
+    PATH+=":/opt/java/jre/bin:/opt/java/jdk/bin" # Java
     PATH+=":/opt/maven/latest/bin"  # Maven
     #PATH+="$HOME/.gem/ruby/2.1.0/bin"
     #PATH+=":$HOME/build/gradle/gradle-2.3/bin"
