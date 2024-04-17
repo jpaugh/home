@@ -57,6 +57,10 @@ git_print_toplevel() {
     git rev-parse --show-toplevel
 }
 
+git_print_short_ref() {
+  git rev-parse --short "$@"
+}
+
 git_most_recent_ancestors_among() {
     local tip="$1"; shift
     local errorListBranches="$@"
