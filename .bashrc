@@ -216,7 +216,10 @@ __do_external_setup() {
       fi
     fi
 
-    eval "$(zoxide init bash)"
+    type -t zoxide >/dev/null && eval "$(zoxide init bash)" || {
+	    __zoxide_hook () { :; }
+    }
+
     aliasIfExecutable z cd
 }
 
@@ -257,7 +260,6 @@ grok () {
     local DIR=$1;shift
     grep -IR "$@" "$DIR"
 }
-
 
 # Reload .bashrc if it's been updated since the last time it ran
 chk_bashrc_timestamp () {
