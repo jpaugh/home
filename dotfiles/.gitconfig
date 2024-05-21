@@ -4,7 +4,7 @@
 [core]
     excludesfile = ~/.gitglobalignore
     pager = "less -RFX"
-    editor = vim
+    editor = nvim
 
 [diff]
     wordRegex = \\w+|[^\\w]
