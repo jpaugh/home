@@ -6,7 +6,7 @@
 import sys script
 import shell
 
-isShellInteractive || exit 1
+isShellInteractive || exit 0
 
 SAVE_PWD="$PWD"
 
