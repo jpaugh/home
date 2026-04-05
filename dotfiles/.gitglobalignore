@@ -25,3 +25,7 @@ cabal.sandbox.config
 .no-compile
 .svn
 .tmuxinator.yml
+
+*.code-workspace
+.vscode/
+.venv/

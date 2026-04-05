@@ -6,6 +6,9 @@
     pager = "less -RFX"
     editor = nvim
 
+[init]
+  defaultBranch = master
+
 [diff]
     wordRegex = \\w+|[^\\w]
 	tool = meld
@@ -32,6 +35,10 @@
 
 [pack]
   threads = 0
+
+[pretty]
+    onedate = tformat:%C(auto,yellow)%h%Creset%(decorate:) %f %Cred%an <%ae>%n    %Cgreen%ad%Creset %Cblue%ah%Creset
+
 
 [alias]
     a = add
@@ -60,8 +67,12 @@
     mm = merge --no-ff
 
     l    = log --decorate --graph --oneline
+    ld   = log --decorate --graph --oneline --format=onedate --date-order
     # commits since the beginning of today
     lt   = log --decorate --graph --oneline --since 00:00
+    today = log --decorate --graph --oneline --since 00:00
+    yesterday = log --decorate --graph --oneline --since yesterday --before 00:00
+    two-days = log --decorate --graph --oneline --since '2 days ago' --before yesterday
     la   = log --decorate --graph --oneline --all
     lta  = log --decorate --graph --oneline --all --since 00:00
     ls   = log --decorate --graph --oneline --stat
@@ -76,14 +87,19 @@
     llls = log --decorate --graph --pretty=full --stat --notes
     lllp = log --decorate --graph --pretty=full --patch --notes
     l1   = log --decorate --graph --pretty=full -1 --shortstat --notes
-    l1p   = log --decorate --graph --pretty=full -1 --shortstat --patch-with-stat --notes
+    l1p  = log --decorate --graph --pretty=full -1 --shortstat --patch-with-stat --notes
+    l1s  = log --decorate --graph --pretty=full -1 --stat --notes
     l5   = log --decorate --graph --oneline -5
-    l10   = log --decorate --graph --oneline -10
-    l15   = log --decorate --graph --oneline -15
+    l10  = log --decorate --graph --oneline -10
+    l15  = log --decorate --graph --oneline -15
 
     # Ideal for fixups or squashes
-    lfix = log -1 '--pretty=format:fixup! %s'
-    lsquash = log -1 '--pretty=format:squash! %s'
+    lfix = log -1 '--pretty=format:fixup! %h %s'
+    lsquash = log -1 '--pretty=format:squash! %h %s'
+
+    lbydate = log '--pretty=tformat:%Cgreen%ad %Cblue%ar %C(yellow)%h %Creset%d %s' --date=short
+
+    rebuild = clean -X --force
 
     st   = status -s
     s = stash
@@ -103,12 +119,10 @@
     historybrowser = gitk
     editor = /usr/bin/gvim
 
-[format]
-    #pretty = oneline
-
 [log]
     abbrevCommit = true
     decorate = true
+    date = format-local:%Y-%m-%d %H:%M
 
 [merge]
     defaultToUpstream = true
@@ -121,6 +135,7 @@
 
 [push]
     default = upstream
+    autoSetupRemote = true
 
 [url "https://github.com/"]
     insteadOf = gh:
@@ -154,6 +169,16 @@
     insteadOf = or:
     insteadOf = repo:
     insteadOf = or.cz:
+
+[url "git@github.com:Mattkins/"]
+    insteadOf = gopher:
+    insteadOf = tg:
+
+[url "gitlab@git.roviata.com:jpaugh/"]
+  insteadOf = rovi:
+
+[url "git@gitlab.com:jpaugh/"]
+  insteadOf = gl:
 
 [github]
     user = jpaugh64

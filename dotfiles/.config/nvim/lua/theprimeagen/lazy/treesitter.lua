@@ -16,9 +16,7 @@ return {
       },
 
       highlight = {
-        -- false disables the whole extension
         enable = true,
-        -- List of languages for which nvim's builtin syntax is run as well
         additional_vim_regex_highlighting = { "markdown" },
       },
     }

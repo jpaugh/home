@@ -16,6 +16,7 @@ set softtabstop=2	" <tab> is the same, but doesn't affect real tabs.
 set expandtab		" Arrg! Python finally bit me!
 set splitright splitbelow " Make new windows come up idiosyncronously.
 set number relativenumber " Line numbering--Oh!
+set autoread
 set hidden		" Buffers prefer to be hidden, instead of inactive
 set scrolloff=2		" Number of lines to keep above or below the cursor onscreen
 set linebreak		" word-wrap long lines instead of char-wrapping
@@ -72,8 +73,15 @@ set sessionoptions=blank,buffers,curdir,folds,help,localoptions,options,resize,t
 " winsize   Size of windows
 
 
+augroup autoreload
+  autocmd!
+  autocmd FocusGained * checktime
+  autocmd CursorHold * checktime
+augroup END
+
 " NeoVim-only settings
 if has("nvim")
+    :highlight Normal guibg=NONE " Preserve transparent background of ghostty
     set nrformats=bin,octal,hex " Which number formats work with ^A and ^X?
     set shada=!,'1000,f1,<500,s100,h
     "   !       Store certain global variables (ALL_CAPS)

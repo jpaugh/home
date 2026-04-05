@@ -300,3 +300,4 @@ __kludge_fyrox_editor () {
   sleep "$sleep_seconds"
   gsettings set org.gnome.desktop.interface text-scaling-factor "$correct_scale_factor"
 }
+source "/home/jpaugh/.wasmedge/env"

@@ -132,7 +132,7 @@ function setupCmp()
           buffer = 'Ω',
           nvim_lua = '𝑙',
         }
-        item.menu = menu_icon[entry.source.name]
+        item.menu = menuIcon[entry.source.name]
         return item
       end,
     },
