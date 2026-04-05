@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 [[ -f "$HOME/libbash/core.sh"  ]] && . "$HOME/libbash/core.sh" || {
     echo >&2 "Cannot load libbash"
     exit 1
