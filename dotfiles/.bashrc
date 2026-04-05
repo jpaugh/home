@@ -66,6 +66,10 @@ __set_vars() {
     HISTFILESIZE=-1
 
     export EDITOR LESS CFLAGS CXXFLAGS MAKEOPTS PROMPT_DIRTRIM JAVA_HOME HISTSIZE HISTFILESIZE HISTCONTROL
+
+    export NIX_CONFIG="experimental-features = nix-command"
+    export _ZO_DOCTOR=0
+    export NEXT_TELEMETRY_DISABLED=1
 }
 
 __set_ls_color() {
@@ -87,14 +91,11 @@ __set_aliases() {
     alias g=git
     alias pdf='gui evince'
     alias myps='ps u -u $USER'
-    alias less='less --LINE-NUMBERS'
     if [[ -x  $(which colordiff 2>/dev/null) ]]; then
         alias diff='colordiff -u'
     else
         alias diff='diff -u'
     fi
-
-    alias vi=vim
 
     alias ll='ls -alF'
     alias la='ls -A'
@@ -118,6 +119,12 @@ __set_aliases() {
     alias vi="$VIM"
     alias vim="$VIM"
     alias oldvim=vim
+
+    local SOUND_DIR="/run/current-system/sw/share/sounds/freedesktop/stereo"
+    alias success="pw-play '$SOUND_DIR/complete.oga'"
+    alias fail="pw-play '$SOUND_DIR/trash-empty.oga'"
+    alias beep="pw-play '$SOUND_DIR/message.oga'"
+    alias rgs="rg --sort=path"
 }
 
 __set_shellopts() {
@@ -231,7 +238,6 @@ __load_nvm () {
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 }
 
-
 if _BASHRC_WAS_RUN 2>/dev/null; then
     :;
 else
@@ -278,7 +284,19 @@ prompt_cmd () {
     __zoxide_hook
     chk_bashrc_timestamp
 }
-PROMPT_COMMAND=prompt_cmd
+PROMPT_COMMAND="prompt_cmd"
+
+cue () {
+  nice "$@"
+  local err=$?
+
+  if [[ $err -gt 0 ]]; then
+    fail&disown
+    return $err
+  fi
+
+  success&disown
+}
 
 fyrox-edit () {
   local sleep_seconds=0.3
@@ -300,4 +318,4 @@ __kludge_fyrox_editor () {
   sleep "$sleep_seconds"
   gsettings set org.gnome.desktop.interface text-scaling-factor "$correct_scale_factor"
 }
-source "/home/jpaugh/.wasmedge/env"
+#source "/home/jpaugh/.wasmedge/env"
